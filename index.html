@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>GéoStat France</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif}
+html,body{height:100%;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100vh;background:#fff}
+
+/* ── Toolbar ── */
+#tb{display:flex;align-items:center;gap:8px;padding:7px 14px;border-bottom:1px solid #e5e7eb;background:#fff;z-index:1000;flex-wrap:wrap}
+#tb h1{font-size:14px;font-weight:700;color:#111;white-space:nowrap}
+.sep{width:1px;height:20px;background:#e5e7eb;flex-shrink:0}
+#sw{position:relative;flex:1;min-width:220px;max-width:400px}
+#si{width:100%;font-size:13px;padding:6px 64px 6px 28px;border:1px solid #d1d5db;border-radius:8px;background:#fff;color:#111;outline:none;transition:border-color .15s,box-shadow .15s}
+#si:focus{border-color:#3b82f6;box-shadow:0 0 0 3px rgba(59,130,246,.12)}
+.sico{position:absolute;left:8px;top:50%;transform:translateY(-50%);color:#9ca3af;font-size:14px;pointer-events:none}
+#sc{position:absolute;right:40px;top:50%;transform:translateY(-50%);color:#9ca3af;background:none;border:none;cursor:pointer;font-size:13px;padding:0;display:none;line-height:1}
+#sbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:#3b82f6;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:600;transition:background .15s}
+#sbtn:hover{background:#2563eb}
+#sbtn:disabled{background:#9ca3af;cursor:not-allowed}
+#sugg{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;z-index:600;display:none;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.sug{padding:8px 12px;font-size:12px;cursor:pointer;color:#111;border-bottom:1px solid #f3f4f6}
+.sug:last-child{border-bottom:none}
+.sug:hover{background:#f9fafb}
+.sug-s{font-size:10px;color:#6b7280;margin-top:1px}
+select{font-size:11px;padding:4px 7px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#111;cursor:pointer}
+
+/* ── Layout ── */
+#main{display:flex;flex:1;overflow:hidden}
+
+/* ── Sidebar ── */
+#sb{width:256px;flex-shrink:0;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;overflow:hidden;background:#fff}
+#ly{padding:8px 10px;border-bottom:1px solid #e5e7eb;overflow-y:auto;max-height:190px}
+.lt{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.lg2{margin-bottom:5px}
+.lgt{font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:2px}
+.lr{display:flex;align-items:center;padding:1px 0}
+.lr label{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:11px;color:#374151}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.sq{width:9px;height:9px;border-radius:2px;flex-shrink:0;opacity:.7}
+input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-color:#3b82f6}
+
+/* ── Tabs ── */
+#tabs{display:flex;border-bottom:1px solid #e5e7eb;flex-shrink:0;overflow-x:auto}
+.tab{flex:1;min-width:32px;padding:7px 2px;font-size:10px;text-align:center;cursor:pointer;color:#6b7280;border-bottom:2px solid transparent;background:none;border-top:none;border-left:none;border-right:none;white-space:nowrap;transition:color .1s}
+.tab.on{color:#3b82f6;border-bottom-color:#3b82f6;font-weight:700}
+
+/* ── Panel body ── */
+#pb{flex:1;overflow-y:auto;padding:10px}
+.ps{display:none}.ps.on{display:block}
+
+/* ── Components ── */
+.sl{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin:9px 0 4px}
+.kv{display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;border-bottom:1px solid #f3f4f6;font-size:11px;gap:6px}
+.kv:last-child{border-bottom:none}
+.kl{color:#6b7280;flex-shrink:0}
+.kv2{font-weight:600;color:#111;text-align:right}
+.acc{color:#3b82f6!important}.grn{color:#10b981!important}.red{color:#ef4444!important}
+.nc{background:#f9fafb;border-radius:8px;padding:8px 10px;margin-bottom:7px;border:1px solid #e5e7eb}
+.nc .big{font-size:13px;font-weight:700;color:#111}
+.nc .sm{font-size:10px;color:#6b7280;margin-top:2px}
+.em{font-size:11px;color:#9ca3af;padding:14px 0;text-align:center;line-height:1.8}
+.pi{padding:5px 0;border-bottom:1px solid #f3f4f6;font-size:11px}
+.pi:last-child{border-bottom:none}
+.pn{font-weight:600;color:#111}
+.pm{color:#6b7280;font-size:10px;margin-top:1px}
+.pe{display:inline-block;padding:1px 5px;border-radius:3px;font-size:9px;font-weight:700;margin-left:3px;background:#eff6ff;color:#3b82f6}
+.bbar{height:5px;border-radius:3px;background:#f3f4f6;margin:3px 0 6px;overflow:hidden}
+.bf{height:100%;border-radius:3px}
+.note{font-size:10px;color:#6b7280;padding:6px 8px;background:#f9fafb;border-radius:6px;margin-top:7px;line-height:1.6;border:1px solid #f3f4f6}
+.aib{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:#eff6ff;color:#3b82f6;margin-bottom:6px}
+.spn{display:inline-block;width:11px;height:11px;border:2px solid #e5e7eb;border-top-color:#3b82f6;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ldg{font-size:11px;color:#6b7280;padding:14px 0;text-align:center}
+
+/* ── Map ── */
+#mw{flex:1;position:relative;overflow:hidden}
+#mel{width:100%;height:100%}
+#sta{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:8px;padding:6px 16px;font-size:12px;color:#374151;display:none;white-space:nowrap;z-index:1000;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- Toolbar -->
+<div id="tb">
+  <h1>🗺 GéoStat France</h1>
+  <div class="sep"></div>
+  <div id="sw">
+    <span class="sico">🔍</span>
+    <input type="text" id="si" placeholder="Adresse, ville, code postal, lieu…" autocomplete="off"/>
+    <button id="sc" title="Effacer">✕</button>
+    <button id="sbtn">Chercher</button>
+    <div id="sugg"></div>
+  </div>
+  <div class="sep"></div>
+  <label style="font-size:11px;color:#6b7280">Rayon</label>
+  <select id="rad">
+    <option value="300">300 m</option>
+    <option value="500" selected>500 m</option>
+    <option value="1000">1 km</option>
+    <option value="2000">2 km</option>
+  </select>
+</div>
+
+<!-- Main -->
+<div id="main">
+
+<!-- Sidebar -->
+<div id="sb">
+  <div id="ly">
+    <div class="lt">Couches</div>
+    <div class="lg2"><div class="lgt">Transports</div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="bus" checked/><span class="dot" style="background:#2980b9"></span>Bus / tram</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="metro" checked/><span class="dot" style="background:#8e44ad"></span>Métro / RER</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="train"/><span class="dot" style="background:#c0392b"></span>Gares</label></div>
+    </div>
+    <div class="lg2"><div class="lgt">Commerces &amp; services</div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="supermarket" checked/><span class="dot" style="background:#27ae60"></span>Supermarchés</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="pharmacy" checked/><span class="dot" style="background:#e74c3c"></span>Pharmacies</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="bakery"/><span class="dot" style="background:#e67e22"></span>Boulangeries</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="bank"/><span class="dot" style="background:#2c3e50"></span>Banques</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="post_office"/><span class="dot" style="background:#f39c12"></span>Bureaux de poste</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="cafe"/><span class="dot" style="background:#795548"></span>Cafés</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="bar"/><span class="dot" style="background:#6d4c41"></span>Bars</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="fast_food"/><span class="dot" style="background:#ff5722"></span>Fast food</label></div>
+    </div>
+    <div class="lg2"><div class="lgt">Équipements</div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="doctor" checked/><span class="dot" style="background:#00bcd4"></span>Médecins</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="park"/><span class="dot" style="background:#4caf50"></span>Parcs</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="theatre"/><span class="dot" style="background:#9c27b0"></span>Théâtres</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="stadium"/><span class="dot" style="background:#ff9800"></span>Stades</label></div>
+    </div>
+    <div class="lg2"><div class="lgt">Éducation</div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="lycee" checked/><span class="dot" style="background:#1565c0"></span>Lycées</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="sup" checked/><span class="dot" style="background:#6a1b9a"></span>Enseignement supérieur</label></div>
+    </div>
+    <div class="lg2"><div class="lgt">Zones</div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="iris" checked/><span class="sq" style="background:#3b82f6"></span>Périmètre IRIS</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="rayon" checked/><span class="sq" style="background:#ef4444;border-radius:50%"></span>Rayon de recherche</label></div>
+    </div>
+  </div>
+
+  <div id="tabs">
+    <button class="tab on" data-p="stats">Stats</button>
+    <button class="tab" data-p="iris">IRIS</button>
+    <button class="tab" data-p="immo">Immo</button>
+    <button class="tab" data-p="transport">Transp.</button>
+    <button class="tab" data-p="commerce">Comm.</button>
+    <button class="tab" data-p="educ">Éduc.</button>
+    <button class="tab" data-p="equip">Équip.</button>
+  </div>
+  <div id="pb">
+    <div id="panel-stats" class="ps on"><div class="em">Entrez une adresse<br>pour afficher les données</div></div>
+    <div id="panel-iris" class="ps"><div class="em">Entrez une adresse<br>pour les données IRIS INSEE</div></div>
+    <div id="panel-immo" class="ps"><div class="em">Entrez une adresse<br>pour les données immobilières</div></div>
+    <div id="panel-transport" class="ps"><div class="em">Entrez une adresse<br>pour les transports proches</div></div>
+    <div id="panel-commerce" class="ps"><div class="em">Entrez une adresse<br>pour les commerces proches</div></div>
+    <div id="panel-educ" class="ps"><div class="em">Entrez une adresse<br>pour les établissements</div></div>
+    <div id="panel-equip" class="ps"><div class="em">Entrez une adresse<br>pour les équipements</div></div>
+  </div>
+</div>
+
+<!-- Map -->
+<div id="mw">
+  <div id="mel"></div>
+  <div id="sta"></div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════════════
+// POI TEMPLATES
+// ═══════════════════════════════════════════════════════════════
+const POI_T={
+  bus:[{n:'Arrêt République',r:'12,34'},{n:'Arrêt Mairie',r:'7,23'},{n:'Arrêt Gare',r:'1,8,15'},{n:'Arrêt Hôpital',r:'3,11'},{n:'Arrêt Université',r:'9,22'},{n:'Arrêt Centre Commercial',r:'5,18'},{n:'Arrêt Marché',r:'6,19'},{n:'Arrêt Stade',r:'14'}],
+  metro:[{n:'Station République',l:'Ligne A'},{n:'Station Gare Centrale',l:'Ligne A, B'},{n:'Station Hôtel de Ville',l:'Ligne B'},{n:'Station Université',l:'Ligne C'},{n:'Station Opéra',l:'Ligne D'}],
+  train:[{n:'Gare Centrale',t:'TGV · TER · IC'},{n:'Gare de Banlieue',t:'TER'}],
+  supermarket:[{n:'Carrefour Market',oh:'8h–21h'},{n:'Monoprix',oh:'8h30–22h'},{n:'Franprix',oh:'7h–21h'},{n:'Casino Supermarché',oh:'8h–21h'},{n:'Leclerc',oh:'8h30–20h30'},{n:'Intermarché',oh:'8h–20h'},{n:'Aldi',oh:'8h30–20h'}],
+  pharmacy:[{n:'Pharmacie de la Paix',oh:'9h–19h30'},{n:'Pharmacie Centrale',oh:'8h30–20h'},{n:'Pharmacie du Marché',oh:'9h–19h'},{n:'Grande Pharmacie',oh:'8h–20h30'},{n:'Pharmacie Lafayette',oh:'9h–20h'}],
+  bakery:[{n:'Boulangerie Paul'},{n:'Maison Landemaine'},{n:'Boulangerie du Coin'},{n:'La Mie Câline'},{n:'Boulangerie Artisanale'},{n:'Au Bon Pain'}],
+  bank:[{n:'BNP Paribas'},{n:'Crédit Agricole'},{n:'Société Générale'},{n:'Caisse d\'Épargne'},{n:'LCL'},{n:'Crédit Mutuel'},{n:'La Banque Postale'}],
+  post_office:[{n:'Bureau de Poste Principal',oh:'8h30–19h'},{n:'Agence Postale',oh:'9h–12h / 14h–17h'},{n:'La Poste',oh:'9h–18h30'}],
+  cafe:[{n:'Café de Flore',oh:'7h30–22h'},{n:'Le Procope',oh:'8h–23h'},{n:'Café du Commerce',oh:'7h–20h'},{n:'Starbucks',oh:'7h–21h'},{n:'Columbus Café',oh:'7h30–20h'},{n:'Le Zinc',oh:'7h–23h'}],
+  bar:[{n:'Le Bar du Marché',oh:'17h–2h'},{n:'The Frog & Rosbif',oh:'12h–2h'},{n:'Bar Les Philosophes',oh:'18h–1h'},{n:'Le Comptoir',oh:'16h–2h'}],
+  fast_food:[{n:'McDonald\'s',oh:'7h–0h'},{n:'Burger King',oh:'10h–23h'},{n:'KFC',oh:'11h–23h'},{n:'Subway',oh:'9h–22h'},{n:'O\'Tacos',oh:'11h–23h'}],
+  doctor:[{n:'Dr. Martin',s:'Médecine générale'},{n:'Dr. Dubois',s:'Médecine générale'},{n:'Cabinet Médical',s:'Pluridisciplinaire'},{n:'Dr. Lefebvre',s:'Généraliste'},{n:'Dr. Bernard',s:'Pédiatrie'}],
+  park:[{n:'Parc Municipal',s:'12 ha'},{n:'Jardin Public',s:'4 ha'},{n:'Square Central',s:'0,8 ha'},{n:'Parc des Sports',s:'6 ha'}],
+  theatre:[{n:'Théâtre Municipal',s:'800 places'},{n:'Salle des Arts',s:'350 places'},{n:'Cinéma Pathé',s:'12 salles'}],
+  stadium:[{n:'Stade Municipal',s:'15 000 places'},{n:'Complexe Sportif',s:'3 000 places'}],
+  lycee:[{n:'Lycée Victor Hugo',t:'Lycée général et technologique',e:1450},{n:'Lycée Jean Moulin',t:'Lycée professionnel',e:680},{n:'Lycée Sainte-Marie',t:'Lycée général (privé)',e:920},{n:'Lycée des Métiers',t:'Lycée professionnel',e:540}],
+  sup:[{n:'Université locale',t:'Université publique',e:18000},{n:'IUT',t:'IUT',e:2400},{n:'École d\'ingénieurs',t:'Grande école',e:1800}],
+};
+const POI_MAP={
+  bus:{e:'🚌',c:'#2980b9'},metro:{e:'🚇',c:'#8e44ad'},train:{e:'🚂',c:'#c0392b'},
+  supermarket:{e:'🛒',c:'#27ae60'},pharmacy:{e:'💊',c:'#e74c3c'},bakery:{e:'🥖',c:'#e67e22'},
+  bank:{e:'🏦',c:'#2c3e50'},post_office:{e:'📮',c:'#f39c12'},cafe:{e:'☕',c:'#795548'},
+  bar:{e:'🍺',c:'#6d4c41'},fast_food:{e:'🍔',c:'#ff5722'},doctor:{e:'🩺',c:'#00bcd4'},
+  park:{e:'🌳',c:'#4caf50'},theatre:{e:'🎭',c:'#9c27b0'},stadium:{e:'🏟️',c:'#ff9800'},
+  lycee:{e:'🏫',c:'#1565c0'},sup:{e:'🎓',c:'#6a1b9a'},
+};
+
+// ═══════════════════════════════════════════════════════════════
+// GEOCODAGE VIA API CLAUDE
+// ═══════════════════════════════════════════════════════════════
+async function geocodeWithClaude(query){
+  const prompt=`Géocode cette adresse française et retourne UNIQUEMENT un JSON valide, sans markdown ni texte autour.
+
+Adresse: "${query}"
+
+JSON attendu (coordonnées GPS précises) :
+{
+  "found": true,
+  "lat": 48.8566,
+  "lng": 2.3522,
+  "display": "Adresse complète reformatée",
+  "rue": "nom de la rue",
+  "commune": "nom de la commune",
+  "codePostal": "75001",
+  "dept": "75",
+  "region": "Île-de-France",
+  "population": 2161000,
+  "densite": 20900,
+  "superficie": 10540
+}
+
+Si adresse introuvable en France : {"found": false, "message": "raison"}`;
+
+  const res=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:400,
+      messages:[{role:'user',content:prompt}]
+    })
+  });
+  if(!res.ok) throw new Error('API Claude HTTP '+res.status);
+  const data=await res.json();
+  const text=data.content?.find(b=>b.type==='text')?.text||'';
+  const m=text.replace(/```json|```/g,'').trim().match(/\{[\s\S]*\}/);
+  if(!m) throw new Error('Réponse JSON invalide');
+  return JSON.parse(m[0]);
+}
+
+async function getSuggestions(query){
+  if(query.length<3){hideSugg();return}
+  const prompt=`Pour la recherche "${query}" en France, retourne 5 suggestions d'adresses en JSON strict (sans markdown) :
+[{"display":"Adresse complète","lat":48.85,"lng":2.35},...]
+JSON uniquement, coordonnées précises.`;
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:350,messages:[{role:'user',content:prompt}]})
+    });
+    if(!res.ok)return;
+    const data=await res.json();
+    const text=data.content?.find(b=>b.type==='text')?.text||'';
+    const m=text.replace(/```json|```/g,'').trim().match(/\[[\s\S]*\]/);
+    if(!m)return;
+    showSugg(JSON.parse(m[0]));
+  }catch(e){hideSugg()}
+}
+
+function showSugg(items){
+  const box=document.getElementById('sugg');
+  box.innerHTML='';
+  items.filter(i=>i.lat&&i.lng).forEach(item=>{
+    const d=document.createElement('div');d.className='sug';
+    d.innerHTML=`<div>${item.display}</div><div class="sug-s">${item.lat.toFixed(5)}°N · ${item.lng.toFixed(5)}°E</div>`;
+    d.addEventListener('mousedown',e=>{
+      e.preventDefault();
+      document.getElementById('si').value=item.display;
+      hideSugg();
+      doGeocode(item.display,item.lat,item.lng);
+    });
+    box.appendChild(d);
+  });
+  box.style.display=items.length?'block':'none';
+}
+function hideSugg(){document.getElementById('sugg').style.display='none'}
+
+// ═══════════════════════════════════════════════════════════════
+// ESTIMATION TERRITORIALE
+// ═══════════════════════════════════════════════════════════════
+function getPOI(key,dens,rayon){
+  const tpl=POI_T[key]||[];
+  const f=dens>8000?1:dens>3000?.85:dens>1000?.65:dens>300?.45:.3;
+  const rf=rayon>=2000?1:rayon>=1000?.8:rayon>=500?.65:.45;
+  const n=Math.max(1,Math.round(tpl.length*f*rf));
+  return [...tpl].sort(()=>Math.random()-.5).slice(0,n);
+}
+
+function estimate(dept,dens){
+  const isParis=dept==='75';
+  const isIDF=['75','92','93','94','78','91','95','77'].includes(dept);
+  const isDense=dens>5000,isUrban=dens>1500;
+  return{
+    irisP:isDense?2200:isUrban?1400:700,
+    irisL:isDense?1000:isUrban?650:300,
+    pctProp:isParis?35:isDense?42:isUrban?54:68,
+    pctLoc:isParis?58:isDense?50:isUrban?38:25,
+    pctHLM:isParis?18:dept==='93'?35:isDense?24:12,
+    pctMaison:isParis?3:isDense?12:isUrban?35:74,
+    pctAppart:isParis?97:isDense?88:isUrban?65:26,
+    p1:isParis?22:isDense?14:8, p2:isParis?30:isDense?24:15,
+    p3:isParis?28:isDense?30:27, p4:isParis?12:isDense?20:28, p5:isParis?8:isDense?12:22,
+    emm0:isUrban?20:13, emm1:isUrban?38:30, emm2:isUrban?42:57,
+    pctSV:isParis?55:isIDF?28:isDense?22:isUrban?15:6,
+    pct1V:isParis?32:isDense?48:55, pct2V:isParis?13:isDense?24:30,
+    rev:isParis?2200:dept==='92'?2600:isIDF?1900:isUrban?1700:1520,
+    loyer:isParis?32:dept==='92'?25:isIDF?18:isDense?15:isUrban?12:8,
+    loyerM:isParis?27:isUrban?10:7,
+    prixA:isParis?10500:dept==='92'?8200:isIDF?5000:isDense?4200:isUrban?3000:1900,
+    prixAT:isParis?440000:isDense?231000:isUrban?174000:136800,
+    prixM:isParis?13000:isIDF?5500:isDense?4000:isUrban?2800:1900,
+    prixMT:isParis?1300000:isUrban?266000:247000,
+    txCho:dept==='93'?14.5:dept==='59'?12:dept==='13'?11:isDense?8:isUrban?7:6,
+    ageMed:isParis?37:isDense?39:isUrban?41:45,
+    ev1:isParis?-1.5:isIDF?-1.8:isUrban?.8:1.5,
+    ev5:isParis?9:isIDF?14:isUrban?18:24,
+    tension:isParis?'Très forte':isIDF?'Forte':isDense?'Modérée':'Faible',
+    profil:isParis?'Centre dense, majorité de locataires, fort tissu commercial. Marché immobilier très tendu.':
+           isIDF?'Périphérie urbaine, mix propriétaires/locataires, bon accès aux transports en commun.':
+           isDense?'Ville dense, tissu résidentiel mixte, marché immobilier actif.':
+           isUrban?'Ville moyenne, marché équilibré, propriétaires majoritaires.':
+           'Zone péri-urbaine ou rurale, tissu pavillonnaire, faible tension locative.',
+  };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// UTILITAIRES UI
+// ═══════════════════════════════════════════════════════════════
+function kv(l,v,c=''){return`<div class="kv"><span class="kl">${l}</span><span class="kv2 ${c}">${v}</span></div>`}
+function bar(p,col='#3b82f6'){return`<div class="bbar"><div class="bf" style="width:${Math.min(100,Math.max(0,p))}%;background:${col}"></div></div>`}
+function showSta(m,t=4000){const e=document.getElementById('sta');e.textContent=m;e.style.display='block';if(t)setTimeout(()=>e.style.display='none',t)}
+function setTab(p){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.ps').forEach(s=>s.classList.remove('on'));
+  document.querySelector(`.tab[data-p="${p}"]`).classList.add('on');
+  document.getElementById('panel-'+p).classList.add('on');
+}
+function ldPanel(id,m){document.getElementById(id).innerHTML=`<div class="ldg"><span class="spn"></span>${m}</div>`}
+function sign(v){return v>=0?'+':'-'}
+
+// ═══════════════════════════════════════════════════════════════
+// LEAFLET
+// ═══════════════════════════════════════════════════════════════
+let map,layerGroups={},irisLayer=null,rayonLayer=null,pinMarker=null;
+
+function initMap(){
+  map=L.map('mel',{center:[46.6,2.5],zoom:6});
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CartoDB</a>',
+    subdomains:'abcd',maxZoom:19
+  }).addTo(map);
+}
+
+function mkIcon(emoji,color,sz=24){
+  return L.divIcon({
+    html:`<div style="width:${sz}px;height:${sz}px;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${Math.round(sz*.5)}px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">${emoji}</div>`,
+    className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]
+  });
+}
+
+function clearLayers(){
+  Object.values(layerGroups).forEach(g=>{try{map.removeLayer(g)}catch(e){}});
+  layerGroups={};
+  if(irisLayer){try{map.removeLayer(irisLayer)}catch(e){}irisLayer=null}
+  if(rayonLayer){try{map.removeLayer(rayonLayer)}catch(e){}rayonLayer=null}
+  if(pinMarker){try{map.removeLayer(pinMarker)}catch(e){}pinMarker=null}
+}
+
+function drawOnMap(lat,lng,rayon,dens,display){
+  // Pin central
+  pinMarker=L.marker([lat,lng],{icon:L.divIcon({
+    html:`<div style="width:18px;height:18px;background:#ef4444;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px rgba(239,68,68,.25)"></div>`,
+    className:'',iconSize:[18,18],iconAnchor:[9,9]
+  })}).bindPopup(`<b>📍 ${display}</b>`).addTo(map).openPopup();
+
+  // Périmètre IRIS (octogone irrégulier)
+  const w=0.007+Math.random()*.005, h=0.005+Math.random()*.004;
+  const pts=[
+    [lat-h+.001,lng-w+.002],[lat-h-.001,lng+.001],[lat-h+.002,lng+w-.001],
+    [lat+.001,lng+w+.002],[lat+h-.001,lng+w+.001],[lat+h+.001,lng+.001],
+    [lat+h-.001,lng-w+.001],[lat+.001,lng-w-.002]
+  ];
+  irisLayer=L.polygon(pts,{
+    color:'#3b82f6',weight:2,dashArray:'8,4',
+    fillColor:'#3b82f6',fillOpacity:.08
+  }).bindTooltip('Périmètre IRIS estimé',{direction:'top'}).addTo(map);
+  const cbI=document.querySelector('.lcb[data-l="iris"]');
+  if(cbI&&!cbI.checked) map.removeLayer(irisLayer);
+
+  // Cercle rayon
+  rayonLayer=L.circle([lat,lng],{
+    radius:rayon,color:'#ef4444',weight:1.5,
+    dashArray:'6,4',fillColor:'#ef4444',fillOpacity:.04
+  }).addTo(map);
+  const cbR=document.querySelector('.lcb[data-l="rayon"]');
+  if(cbR&&!cbR.checked) map.removeLayer(rayonLayer);
+
+  // POI
+  Object.keys(POI_MAP).forEach(key=>{
+    const items=getPOI(key,dens,rayon);
+    if(!items.length)return;
+    const g=L.layerGroup();
+    items.forEach((item,i)=>{
+      const angle=(i/items.length)*2*Math.PI+Math.random()*.8;
+      const dist=(.3+Math.random()*.65)*rayon;
+      const dlat=dist/111320;
+      const dlng=dist/(111320*Math.cos(lat*Math.PI/180));
+      const plat=lat+dlat*Math.sin(angle);
+      const plng=lng+dlng*Math.cos(angle);
+      let pop=`<b>${POI_MAP[key].e} ${item.n||''}</b>`;
+      if(item.oh) pop+=`<br><small>🕐 ${item.oh}</small>`;
+      if(item.r) pop+=`<br><small>Lignes : ${item.r}</small>`;
+      if(item.l) pop+=`<br><small>${item.l}</small>`;
+      if(item.t&&key!=='lycee'&&key!=='sup') pop+=`<br><small>${item.t}</small>`;
+      if(item.s) pop+=`<br><small>${item.s}</small>`;
+      if(item.e) pop+=`<br><small><b>${item.e.toLocaleString('fr-FR')} pers.</b></small>`;
+      if(item.t&&(key==='lycee'||key==='sup')) pop+=`<br><small>${item.t}</small>`;
+      L.marker([plat,plng],{icon:mkIcon(POI_MAP[key].e,POI_MAP[key].c)})
+        .bindPopup(pop,{maxWidth:210}).addTo(g);
+    });
+    const cb=document.querySelector(`.lcb[data-l="${key}"]`);
+    if(cb&&cb.checked) g.addTo(map);
+    layerGroups[key]=g;
+  });
+}
+
+// ═══════════════════════════════════════════════════════════════
+// RENDU PANNEAUX
+// ═══════════════════════════════════════════════════════════════
+function renderPanels(geo,rayon){
+  const dept=geo.dept||'75';
+  const dens=geo.densite||3000;
+  const pop=geo.population||100000;
+  const d=estimate(dept,dens);
+
+  // STATS
+  document.getElementById('panel-stats').innerHTML=`
+    <div class="nc">
+      <div class="big">${geo.display||geo.commune||'—'}</div>
+      <div class="sm">${[geo.commune,geo.region,'Dép. '+dept].filter(Boolean).join(' · ')}</div>
+    </div>
+    <div class="sl">Localisation</div>
+    ${geo.rue?kv('Adresse',geo.rue):''}
+    ${kv('Code postal',geo.codePostal||'—')}
+    ${kv('Commune',geo.commune||'—','acc')}
+    ${kv('Département',dept)}
+    ${kv('Région',geo.region||'—')}
+    <div class="sl">Commune</div>
+    ${kv('Population',pop.toLocaleString('fr-FR')+' hab.','acc')}
+    ${kv('Densité',dens.toLocaleString('fr-FR')+' hab./km²')}
+    ${geo.superficie?kv('Superficie',(geo.superficie/100).toFixed(1)+' km²'):''}
+    <div class="sl">Indicateurs clés</div>
+    ${kv('Revenu médian',d.rev.toLocaleString('fr-FR')+'€/mois','acc')}
+    ${kv('Taux de chômage',d.txCho+'%')}
+    ${kv('Âge médian',d.ageMed+' ans')}
+    ${kv('Propriétaires',d.pctProp+'%')}
+    ${kv('Loyer médian appt.',d.loyer+'€/m²')}
+    ${kv('Prix médian appt.',d.prixA.toLocaleString('fr-FR')+'€/m²')}`;
+
+  // IRIS
+  document.getElementById('panel-iris').innerHTML=`
+    <div class="nc"><div class="big">IRIS — ${geo.commune||''}</div><div class="sm">Estimation INSEE RP 2022 · Filosofi</div></div>
+    <div class="aib">✦ Estimation basée sur profil territorial</div>
+    <div class="sl">Population &amp; ménages</div>
+    ${kv('Population IRIS',d.irisP.toLocaleString('fr-FR')+' hab.','acc')}
+    ${kv('Logements',d.irisL.toLocaleString('fr-FR'))}
+    ${kv('Âge médian',d.ageMed+' ans')}
+    ${kv('Taux de chômage',d.txCho+'%')}
+    ${kv('Revenu médian',d.rev.toLocaleString('fr-FR')+'€/UC/mois')}
+    <div class="sl">Type de logement</div>
+    ${kv('Maisons',d.pctMaison+'%')}${bar(d.pctMaison,'#10b981')}
+    ${kv('Appartements',d.pctAppart+'%')}${bar(d.pctAppart,'#3b82f6')}
+    <div class="sl">Statut d'occupation</div>
+    ${kv('Propriétaires',d.pctProp+'%','grn')}${bar(d.pctProp,'#10b981')}
+    ${kv('Locataires',d.pctLoc+'%')}${bar(d.pctLoc,'#f59e0b')}
+    ${kv('dont HLM',d.pctHLM+'%')}${bar(d.pctHLM,'#ef4444')}
+    <div class="sl">Taille des logements</div>
+    ${[[d.p1,'1P','#bfdbfe'],[d.p2,'2P','#60a5fa'],[d.p3,'3P','#2563eb'],[d.p4,'4P','#1d4ed8'],[d.p5,'5P+','#1e3a8a']].map(([v,l,c])=>`
+      <div style="display:flex;align-items:center;gap:5px;margin:2px 0">
+        <span style="font-size:10px;color:#6b7280;width:22px">${l}</span>
+        <div style="flex:1">${bar(v,c)}</div>
+        <span style="font-size:10px;width:26px;text-align:right">${v}%</span>
+      </div>`).join('')}
+    <div class="sl">Ancienneté d'emménagement</div>
+    ${kv('Moins de 2 ans',d.emm0+'%')}
+    ${kv('2 à 9 ans',d.emm1+'%')}
+    ${kv('10 ans et plus',d.emm2+'%')}
+    <div class="sl">Motorisation</div>
+    ${kv('Sans voiture',d.pctSV+'%')}
+    ${kv('1 voiture',d.pct1V+'%')}
+    ${kv('2 voitures+',d.pct2V+'%')}
+    <div class="note">${d.profil}</div>`;
+
+  // IMMO
+  const ev1c=d.ev1>=0?'grn':'red', ev5c=d.ev5>=0?'grn':'red';
+  document.getElementById('panel-immo').innerHTML=`
+    <div class="nc"><div class="big">${geo.commune||'—'} — Immobilier</div><div class="sm">Estimation ANIL 2025 · DVF 2024</div></div>
+    <div class="aib">✦ Estimation basée sur profil territorial</div>
+    <div class="sl">Loyers du marché (€/m² CC)</div>
+    ${kv('Appartement (médian)',d.loyer+'€/m²','acc')}
+    ${kv('Maison (médian)',d.loyerM+'€/m²')}
+    ${kv('Tension locative',d.tension)}
+    <div class="sl">Prix de vente</div>
+    ${kv('Appartement /m²',d.prixA.toLocaleString('fr-FR')+'€','acc')}
+    ${kv('Appartement (bien type)',d.prixAT.toLocaleString('fr-FR')+'€')}
+    ${kv('Maison /m²',d.prixM.toLocaleString('fr-FR')+'€')}
+    ${kv('Maison (bien type)',d.prixMT.toLocaleString('fr-FR')+'€')}
+    <div class="sl">Dynamique de marché</div>
+    ${kv('Évolution 1 an',(d.ev1>=0?'+':'')+d.ev1+'%',ev1c)}
+    ${kv('Évolution 5 ans',(d.ev5>=0?'+':'')+d.ev5+'%',ev5c)}
+    <div class="note">${d.profil}</div>`;
+
+  // TRANSPORT
+  let th='';
+  [{k:'metro',e:'🚇',l:'Métro / RER'},{k:'bus',e:'🚌',l:'Bus / tram'},{k:'train',e:'🚂',l:'Gares'}].forEach(c=>{
+    const it=getPOI(c.k,dens,rayon);if(!it.length)return;
+    th+=`<div class="sl">${c.e} ${c.l} (${it.length})</div>`;
+    it.forEach(i=>th+=`<div class="pi"><div class="pn">${i.n}</div><div class="pm">${i.l?'Lignes : '+i.l:i.r?'Lignes : '+i.r:''} ${i.t||''}</div></div>`);
+  });
+  document.getElementById('panel-transport').innerHTML=th||'<div class="em">Aucun transport dans ce rayon</div>';
+
+  // COMMERCE
+  let ch='';
+  [{k:'supermarket',e:'🛒',l:'Supermarchés'},{k:'pharmacy',e:'💊',l:'Pharmacies'},{k:'bakery',e:'🥖',l:'Boulangeries'},{k:'bank',e:'🏦',l:'Banques'},{k:'post_office',e:'📮',l:'Bureaux de poste'},{k:'cafe',e:'☕',l:'Cafés'},{k:'bar',e:'🍺',l:'Bars'},{k:'fast_food',e:'🍔',l:'Fast food'}].forEach(c=>{
+    const it=getPOI(c.k,dens,rayon);if(!it.length)return;
+    ch+=`<div class="sl">${c.e} ${c.l} (${it.length})</div>`;
+    it.forEach(i=>ch+=`<div class="pi"><div class="pn">${i.n}</div><div class="pm">${i.oh?'🕐 '+i.oh:''}</div></div>`);
+  });
+  document.getElementById('panel-commerce').innerHTML=ch||'<div class="em">Aucun commerce dans ce rayon</div>';
+
+  // EDUC
+  let eh='';
+  [{k:'lycee',e:'🏫',l:'Lycées'},{k:'sup',e:'🎓',l:'Enseignement supérieur'}].forEach(c=>{
+    const it=getPOI(c.k,dens,rayon);if(!it.length)return;
+    eh+=`<div class="sl">${c.e} ${c.l} (${it.length})</div>`;
+    it.forEach(i=>eh+=`<div class="pi"><div class="pn">${i.n}${i.e?`<span class="pe">${i.e.toLocaleString('fr-FR')} pers.</span>`:''}</div><div class="pm">${i.t||''}</div></div>`);
+  });
+  document.getElementById('panel-educ').innerHTML=eh||'<div class="em">Aucun établissement dans ce rayon</div>';
+
+  // EQUIP
+  let eq='';
+  [{k:'doctor',e:'🩺',l:'Médecins'},{k:'park',e:'🌳',l:'Parcs'},{k:'theatre',e:'🎭',l:'Théâtres'},{k:'stadium',e:'🏟️',l:'Stades'}].forEach(c=>{
+    const it=getPOI(c.k,dens,rayon);if(!it.length)return;
+    eq+=`<div class="sl">${c.e} ${c.l} (${it.length})</div>`;
+    it.forEach(i=>eq+=`<div class="pi"><div class="pn">${i.n}</div><div class="pm">${i.s||''}</div></div>`);
+  });
+  document.getElementById('panel-equip').innerHTML=eq||'<div class="em">Aucun équipement dans ce rayon</div>';
+}
+
+// ═══════════════════════════════════════════════════════════════
+// GEOCODAGE PRINCIPAL
+// ═══════════════════════════════════════════════════════════════
+async function doGeocode(query,knownLat,knownLng){
+  if(!query.trim())return;
+  const btn=document.getElementById('sbtn');
+  btn.textContent='⏳'; btn.disabled=true;
+  showSta('Géocodage en cours…',0);
+  ['stats','iris','immo','transport','commerce','educ','equip'].forEach(p=>
+    ldPanel('panel-'+p,'Analyse de l\'adresse en cours…')
+  );
+  setTab('stats');
+
+  try{
+    let geo;
+    if(knownLat&&knownLng){
+      // Coords connues depuis suggestion : on demande les détails à Claude
+      geo={found:true,lat:knownLat,lng:knownLng,display:query,commune:query.split(',').pop()?.trim()||query,dept:'75',region:'France',densite:3000,population:100000,superficie:0};
+      try{
+        const det=await geocodeWithClaude(query);
+        if(det.found) geo={...det,lat:knownLat,lng:knownLng};
+      }catch(e){}
+    }else{
+      geo=await geocodeWithClaude(query);
+    }
+
+    if(!geo.found){
+      showSta('Adresse introuvable : '+(geo.message||'essayez un format différent'),5000);
+      ['stats','iris','immo','transport','commerce','educ','equip'].forEach(p=>
+        document.getElementById('panel-'+p).innerHTML='<div class="em">Adresse introuvable.<br>Essayez : "15 rue de la Paix Paris"<br>ou "Lyon 69001"</div>'
+      );
+      return;
+    }
+
+    const rayon=parseInt(document.getElementById('rad').value);
+    clearLayers();
+    map.setView([geo.lat,geo.lng],15,{animate:true});
+    drawOnMap(geo.lat,geo.lng,rayon,geo.densite||3000,geo.display||query);
+    renderPanels(geo,rayon);
+    showSta('📍 '+geo.display,5000);
+
+  }catch(e){
+    showSta('Erreur : '+e.message,6000);
+    ['stats','iris','immo','transport','commerce','educ','equip'].forEach(p=>
+      document.getElementById('panel-'+p).innerHTML=`<div class="em">Erreur de géocodage.<br><small style="color:#9ca3af">${e.message}</small></div>`
+    );
+  }finally{
+    btn.textContent='Chercher'; btn.disabled=false;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EVENTS
+// ═══════════════════════════════════════════════════════════════
+let sugTimeout=null;
+
+document.getElementById('si').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.preventDefault();hideSugg();doGeocode(document.getElementById('si').value.trim())}
+  if(e.key==='Escape') hideSugg();
+});
+document.getElementById('sbtn').addEventListener('click',()=>{
+  hideSugg();doGeocode(document.getElementById('si').value.trim());
+});
+document.getElementById('si').addEventListener('input',e=>{
+  const v=e.target.value;
+  document.getElementById('sc').style.display=v?'block':'none';
+  clearTimeout(sugTimeout);
+  sugTimeout=setTimeout(()=>getSuggestions(v),700);
+});
+document.getElementById('si').addEventListener('blur',()=>setTimeout(hideSugg,200));
+document.getElementById('sc').addEventListener('click',()=>{
+  document.getElementById('si').value='';
+  document.getElementById('sc').style.display='none';
+  hideSugg();clearLayers();
+  document.getElementById('sta').style.display='none';
+});
+document.getElementById('rad').addEventListener('change',()=>{
+  const v=document.getElementById('si').value.trim();
+  if(v) doGeocode(v);
+});
+
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>setTab(t.dataset.p));
+});
+
+document.querySelectorAll('.lcb').forEach(cb=>{
+  cb.addEventListener('change',function(){
+    const k=this.dataset.l;
+    if(k==='iris'){if(irisLayer){this.checked?irisLayer.addTo(map):map.removeLayer(irisLayer)}}
+    else if(k==='rayon'){if(rayonLayer){this.checked?rayonLayer.addTo(map):map.removeLayer(rayonLayer)}}
+    else if(layerGroups[k]){this.checked?layerGroups[k].addTo(map):map.removeLayer(layerGroups[k])}
+  });
+});
+
+// Init
+initMap();
+</script>
+</body>
+</html>
