@@ -21,18 +21,18 @@ html,body{height:100%;overflow:hidden}
 #sbtn{position:absolute;right:4px;top:50%;transform:translateY(-50%);background:#3b82f6;color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:600}
 #sbtn:hover{background:#2563eb}
 #sbtn:disabled{background:#9ca3af;cursor:not-allowed}
-#sugg{position:absolute;top:calc(100% + 4px);left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;z-index:600;display:none;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)}
+#sugg{position:absolute;top:calc(100%+4px);left:0;right:0;background:#fff;border:1px solid #e5e7eb;border-radius:8px;z-index:600;display:none;max-height:240px;overflow-y:auto;box-shadow:0 8px 24px rgba(0,0,0,.12)}
 .sug{padding:8px 12px;font-size:12px;cursor:pointer;color:#111;border-bottom:1px solid #f3f4f6}
 .sug:last-child{border-bottom:none}
 .sug:hover{background:#f9fafb}
 .sug-s{font-size:10px;color:#6b7280;margin-top:1px}
 select,#tbbtns button{font-size:11px;padding:4px 8px;border:1px solid #d1d5db;border-radius:6px;background:#fff;color:#111;cursor:pointer}
-#tbbtns{display:flex;gap:4px}
+#tbbtns{display:flex;gap:4px;position:relative}
 #tbbtns button:hover{background:#f3f4f6}
 #tbbtns button.active{background:#3b82f6;color:#fff;border-color:#3b82f6}
 #main{display:flex;flex:1;overflow:hidden}
 #sb{width:256px;flex-shrink:0;border-right:1px solid #e5e7eb;display:flex;flex-direction:column;overflow:hidden;background:#fff}
-#ly{padding:8px 10px;border-bottom:1px solid #e5e7eb;overflow-y:auto;max-height:190px}
+#ly{padding:8px 10px;border-bottom:1px solid #e5e7eb;overflow-y:auto;max-height:195px}
 .lt{font-size:10px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
 .lg2{margin-bottom:5px}
 .lgt{font-size:10px;color:#9ca3af;font-weight:600;margin-bottom:2px}
@@ -65,42 +65,30 @@ input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-
 .bf{height:100%;border-radius:3px}
 .note{font-size:10px;color:#6b7280;padding:6px 8px;background:#f9fafb;border-radius:6px;margin-top:7px;line-height:1.6;border:1px solid #f3f4f6}
 .aib{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:#eff6ff;color:#3b82f6;margin-bottom:6px}
-.rib{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;font-size:9px;font-weight:700;background:#f0fdf4;color:#10b981;margin-bottom:6px}
 .spn{display:inline-block;width:11px;height:11px;border:2px solid #e5e7eb;border-top-color:#3b82f6;border-radius:50%;animation:spin .6s linear infinite;vertical-align:middle;margin-right:5px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .ldg{font-size:11px;color:#6b7280;padding:14px 0;text-align:center}
-/* Historique */
-#hist-panel{position:absolute;top:44px;right:0;width:280px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:900;display:none;max-height:320px;overflow-y:auto}
+#hist-panel{position:absolute;top:38px;right:0;width:280px;background:#fff;border:1px solid #e5e7eb;border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.12);z-index:900;display:none;max-height:300px;overflow-y:auto}
 .hist-item{padding:8px 12px;border-bottom:1px solid #f3f4f6;cursor:pointer;font-size:12px}
 .hist-item:hover{background:#f9fafb}
-.hist-item .hi-addr{font-weight:600;color:#111}
-.hist-item .hi-date{font-size:10px;color:#9ca3af;margin-top:1px}
-/* Comparaison */
+.hi-addr{font-weight:600;color:#111}
+.hi-date{font-size:10px;color:#9ca3af;margin-top:1px}
 #cmp-bar{display:none;background:#fffbeb;border-bottom:1px solid #fde68a;padding:6px 14px;font-size:12px;color:#92400e;align-items:center;gap:8px}
 #cmp-bar button{font-size:11px;padding:3px 8px;border-radius:5px;border:1px solid #f59e0b;background:#fff;color:#92400e;cursor:pointer}
-/* Map */
 #mw{flex:1;position:relative;overflow:hidden}
 #mel{width:100%;height:100%}
 #sta{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,.96);border:1px solid #e5e7eb;border-radius:8px;padding:6px 16px;font-size:12px;color:#374151;display:none;white-space:nowrap;z-index:1000;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-/* Comparaison overlay */
 #cmp-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;align-items:center;justify-content:center}
 #cmp-box{background:#fff;border-radius:12px;width:90%;max-width:760px;max-height:85vh;overflow-y:auto;padding:20px}
-#cmp-box h2{font-size:15px;font-weight:700;margin-bottom:14px;color:#111}
-.cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.cmp-col{background:#f9fafb;border-radius:8px;padding:12px;border:1px solid #e5e7eb}
-.cmp-col h3{font-size:12px;font-weight:700;color:#3b82f6;margin-bottom:8px}
-.cmp-kv{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px solid #f3f4f6}
-.cmp-kv:last-child{border-bottom:none}
-.cmp-kl{color:#6b7280}
-.cmp-kv2{font-weight:600;color:#111}
+.cmp-kv{display:flex;justify-content:space-between;padding:3px 0;font-size:11px;border-bottom:1px solid #f3f4f6;gap:8px}
+.cmp-kl{color:#6b7280;flex:1}
+.cmp-v{font-weight:600;color:#111;width:140px;text-align:right}
 .better{color:#10b981!important}
 .worse{color:#ef4444!important}
 </style>
 </head>
 <body>
 <div id="app">
-
-<!-- Toolbar -->
 <div id="tb">
   <h1>🗺 GéoStat France</h1>
   <div class="sep"></div>
@@ -120,21 +108,18 @@ input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-
     <option value="2000">2 km</option>
   </select>
   <div class="sep"></div>
-  <div id="tbbtns" style="position:relative">
-    <button id="btn-hist" title="Historique des recherches">🕐 Historique</button>
-    <button id="btn-cmp" title="Comparer deux adresses">⚖️ Comparer</button>
-    <button id="btn-pdf" title="Exporter en PDF">📄 PDF</button>
+  <div id="tbbtns">
+    <button id="btn-hist">🕐 Historique</button>
+    <button id="btn-cmp">⚖️ Comparer</button>
+    <button id="btn-pdf">📄 PDF</button>
     <div id="hist-panel"></div>
   </div>
 </div>
-
-<!-- Barre comparaison -->
 <div id="cmp-bar">
   <span id="cmp-msg">Mode comparaison : recherchez une 2e adresse</span>
   <button id="btn-cmp-cancel">Annuler</button>
   <button id="btn-cmp-show" style="display:none;background:#f59e0b;color:#fff;border-color:#d97706">Voir la comparaison</button>
 </div>
-
 <div id="main">
 <div id="sb">
   <div id="ly">
@@ -166,7 +151,9 @@ input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-
     </div>
     <div class="lg2"><div class="lgt">Zones</div>
       <div class="lr"><label><input type="checkbox" class="lcb" data-l="iris" checked/><span class="sq" style="background:#3b82f6"></span>Périmètre IRIS</label></div>
-      <div class="lr"><label><input type="checkbox" class="lcb" data-l="rayon" checked/><span class="sq" style="background:#ef4444;border-radius:50%"></span>Rayon de recherche</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="qpv" checked/><span class="sq" style="background:#ef4444"></span>QPV</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="zfu" checked/><span class="sq" style="background:#f59e0b"></span>ZFU</label></div>
+      <div class="lr"><label><input type="checkbox" class="lcb" data-l="rayon" checked/><span class="sq" style="background:#6b7280;border-radius:50%"></span>Rayon</label></div>
     </div>
   </div>
   <div id="tabs">
@@ -193,136 +180,117 @@ input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-
   <div id="sta"></div>
 </div>
 </div>
-
-<!-- Overlay comparaison -->
 <div id="cmp-overlay">
   <div id="cmp-box">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px">
-      <h2>⚖️ Comparaison des deux adresses</h2>
+      <h2 style="font-size:15px;font-weight:700">⚖️ Comparaison</h2>
       <button onclick="document.getElementById('cmp-overlay').style.display='none'" style="background:none;border:none;font-size:18px;cursor:pointer;color:#6b7280">✕</button>
     </div>
     <div id="cmp-content"></div>
   </div>
 </div>
-
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-// ═══════════════════════════════════════════════════════════
-// CONFIG OVERPASS
-// ═══════════════════════════════════════════════════════════
-const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
-const POI_CFG = {
-  bus:        {e:'🚌',c:'#2980b9',q:'node["highway"="bus_stop"]',l:'Bus/tram'},
-  metro:      {e:'🚇',c:'#8e44ad',q:'node["railway"~"station|subway_entrance"]',l:'Métro/RER'},
-  train:      {e:'🚂',c:'#c0392b',q:'node["railway"="station"]',l:'Gare'},
-  supermarket:{e:'🛒',c:'#27ae60',q:'node["shop"~"supermarket|convenience|grocery"]',l:'Supermarché'},
-  pharmacy:   {e:'💊',c:'#e74c3c',q:'node["amenity"="pharmacy"]',l:'Pharmacie'},
-  bakery:     {e:'🥖',c:'#e67e22',q:'node["shop"="bakery"]',l:'Boulangerie'},
-  bank:       {e:'🏦',c:'#2c3e50',q:'node["amenity"="bank"]',l:'Banque'},
-  post_office:{e:'📮',c:'#f39c12',q:'node["amenity"="post_office"]',l:'Poste'},
-  cafe:       {e:'☕',c:'#795548',q:'node["amenity"="cafe"]',l:'Café'},
-  bar:        {e:'🍺',c:'#6d4c41',q:'node["amenity"="bar"]',l:'Bar'},
-  fast_food:  {e:'🍔',c:'#ff5722',q:'node["amenity"="fast_food"]',l:'Fast food'},
-  doctor:     {e:'🩺',c:'#00bcd4',q:'node["amenity"~"doctors|clinic|hospital"]',l:'Médecin'},
-  park:       {e:'🌳',c:'#4caf50',q:'(way["leisure"="park"];relation["leisure"="park"];)',l:'Parc'},
-  theatre:    {e:'🎭',c:'#9c27b0',q:'node["amenity"~"theatre|cinema"]',l:'Théâtre/Cinéma'},
-  stadium:    {e:'🏟️',c:'#ff9800',q:'(node["leisure"~"stadium|sports_centre"];way["leisure"~"stadium|sports_centre"];)',l:'Stade'},
-  lycee:      {e:'🏫',c:'#1565c0',q:'node["amenity"="school"]',l:'École/Lycée'},
-  sup:        {e:'🎓',c:'#6a1b9a',q:'(node["amenity"~"university|college"];way["amenity"~"university|college"];)',l:'Supérieur'},
+// ═══════════════════════════════════════════
+// CONFIGURATION POI — catégories OSM
+// ═══════════════════════════════════════════
+const POI_CATS = {
+  bus:         {e:'🚌',c:'#2980b9',tag:'highway=bus_stop',t:'node',l:'Bus/tram'},
+  metro:       {e:'🚇',c:'#8e44ad',tag:'railway=station',t:'node',l:'Métro/RER'},
+  train:       {e:'🚂',c:'#c0392b',tag:'railway=station',t:'node',l:'Gare'},
+  supermarket: {e:'🛒',c:'#27ae60',tag:'shop~supermarket|convenience',t:'node',l:'Supermarché'},
+  pharmacy:    {e:'💊',c:'#e74c3c',tag:'amenity=pharmacy',t:'node',l:'Pharmacie'},
+  bakery:      {e:'🥖',c:'#e67e22',tag:'shop=bakery',t:'node',l:'Boulangerie'},
+  bank:        {e:'🏦',c:'#2c3e50',tag:'amenity=bank',t:'node',l:'Banque'},
+  post_office: {e:'📮',c:'#f39c12',tag:'amenity=post_office',t:'node',l:'Bureau de poste'},
+  cafe:        {e:'☕',c:'#795548',tag:'amenity=cafe',t:'node',l:'Café'},
+  bar:         {e:'🍺',c:'#6d4c41',tag:'amenity=bar',t:'node',l:'Bar'},
+  fast_food:   {e:'🍔',c:'#ff5722',tag:'amenity=fast_food',t:'node',l:'Fast food'},
+  doctor:      {e:'🩺',c:'#00bcd4',tag:'amenity~doctors|clinic',t:'node',l:'Médecin'},
+  park:        {e:'🌳',c:'#4caf50',tag:'leisure=park',t:'way',l:'Parc'},
+  theatre:     {e:'🎭',c:'#9c27b0',tag:'amenity~theatre|cinema',t:'node',l:'Théâtre/Cinéma'},
+  stadium:     {e:'🏟️',c:'#ff9800',tag:'leisure~stadium|sports_centre',t:'node',l:'Stade'},
+  lycee:       {e:'🏫',c:'#1565c0',tag:'amenity=school',t:'node',l:'École/Lycée'},
+  sup:         {e:'🎓',c:'#6a1b9a',tag:'amenity~university|college',t:'node',l:'Supérieur'},
 };
 
-// ═══════════════════════════════════════════════════════════
-// ÉTAT GLOBAL
-// ═══════════════════════════════════════════════════════════
-let map, layerGroups={}, irisLayer=null, rayonLayer=null, pinMarker=null;
-let pinMarker2=null, irisLayer2=null, rayonLayer2=null;
-let currentGeo=null, currentIRIS=null, currentEst=null, currentRayon=500;
-let compareGeo=null, compareIRIS=null, compareEst=null;
-let compareMode=false;
-let history=JSON.parse(localStorage.getItem('geohist')||'[]');
-let poiCache={};
+const OVERPASS = 'https://overpass-api.de/api/interpreter';
 
-// ═══════════════════════════════════════════════════════════
-// UTILITAIRES UI
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
+// ÉTAT GLOBAL
+// ═══════════════════════════════════════════
+let map, poiLayers={}, irisLayer=null, rayonLayer=null, pinMarker=null;
+let irisLayer2=null, rayonLayer2=null, pinMarker2=null;
+let qpvLayer=null, zfuLayer=null;
+let qpvLayer2=null, zfuLayer2=null;
+let currentGeo=null, currentEst=null;
+let compareGeo=null, compareEst=null;
+let compareMode=false;
+let history=[];
+try{history=JSON.parse(localStorage.getItem('geohist')||'[]')}catch(e){}
+
+// ═══════════════════════════════════════════
+// UTILITAIRES
+// ═══════════════════════════════════════════
 function kv(l,v,c=''){return`<div class="kv"><span class="kl">${l}</span><span class="kv2 ${c}">${v}</span></div>`}
 function bar(p,col='#3b82f6'){return`<div class="bbar"><div class="bf" style="width:${Math.min(100,Math.max(0,p))}%;background:${col}"></div></div>`}
 function showSta(m,t=4000){const e=document.getElementById('sta');e.textContent=m;e.style.display='block';if(t)setTimeout(()=>e.style.display='none',t)}
-function setTab(p){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.ps').forEach(s=>s.classList.remove('on'));document.querySelector(`.tab[data-p="${p}"]`).classList.add('on');document.getElementById('panel-'+p).classList.add('on')}
-function ldPanel(id,m){document.getElementById(id).innerHTML=`<div class="ldg"><span class="spn"></span>${m}</div>`}
+function setTab(p){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.querySelectorAll('.ps').forEach(s=>s.classList.remove('on'));document.querySelector('.tab[data-p="'+p+'"]').classList.add('on');document.getElementById('panel-'+p).classList.add('on')}
+function ldPanel(id,m){document.getElementById(id).innerHTML='<div class="ldg"><span class="spn"></span>'+m+'</div>'}
 function hideSugg(){document.getElementById('sugg').style.display='none'}
-function showSugg(items){
-  const box=document.getElementById('sugg');box.innerHTML='';
-  items.forEach(item=>{
-    const d=document.createElement('div');d.className='sug';
-    d.innerHTML=`<div>${item.display}</div><div class="sug-s">${item.lat.toFixed(4)}°N · ${item.lng.toFixed(4)}°E</div>`;
-    d.addEventListener('mousedown',e=>{e.preventDefault();document.getElementById('si').value=item.display;hideSugg();doGeocode(item.display,item.lat,item.lng)});
-    box.appendChild(d);
-  });
-  box.style.display=items.length?'block':'none';
-}
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // HISTORIQUE
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function saveHistory(geo){
   history=history.filter(h=>h.display!==geo.display);
   history.unshift({display:geo.display,commune:geo.commune,dept:geo.dept,lat:geo.lat,lng:geo.lng,date:new Date().toLocaleDateString('fr-FR')});
   history=history.slice(0,20);
-  localStorage.setItem('geohist',JSON.stringify(history));
+  try{localStorage.setItem('geohist',JSON.stringify(history))}catch(e){}
   renderHistory();
 }
 function renderHistory(){
-  const panel=document.getElementById('hist-panel');
-  if(!history.length){panel.innerHTML='<div class="em">Aucun historique</div>';return}
-  panel.innerHTML=history.map((h,i)=>`
-    <div class="hist-item" onclick="loadFromHistory(${i})">
-      <div class="hi-addr">${h.display}</div>
-      <div class="hi-date">${h.commune||''} · ${h.date}</div>
-    </div>`).join('');
+  const p=document.getElementById('hist-panel');
+  if(!history.length){p.innerHTML='<div class="em">Aucun historique</div>';return}
+  p.innerHTML=history.map((h,i)=>'<div class="hist-item" onclick="loadHist('+i+')"><div class="hi-addr">'+h.display+'</div><div class="hi-date">'+(h.commune||'')+' · '+h.date+'</div></div>').join('');
 }
-function loadFromHistory(i){
-  const h=history[i];
-  document.getElementById('si').value=h.display;
-  document.getElementById('hist-panel').style.display='none';
-  doGeocode(h.display,h.lat,h.lng);
-}
+function loadHist(i){const h=history[i];document.getElementById('si').value=h.display;document.getElementById('hist-panel').style.display='none';doGeocode(h.display,h.lat,h.lng)}
 renderHistory();
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // NOMINATIM
-// ═══════════════════════════════════════════════════════════
-async function geocodeNominatim(query){
-  const url='https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(query)+'&countrycodes=fr&limit=1&addressdetails=1&accept-language=fr';
-  const res=await fetch(url,{headers:{'User-Agent':'GeoStatFrance/1.0'}});
-  if(!res.ok)throw new Error('Nominatim HTTP '+res.status);
-  const data=await res.json();
-  if(!data||!data.length)return{found:false};
-  const r=data[0];const a=r.address||{};
+// ═══════════════════════════════════════════
+async function geocode(query){
+  const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(query)+'&countrycodes=fr&limit=1&addressdetails=1&accept-language=fr',{headers:{'User-Agent':'GeoStatFrance/1.0'}});
+  if(!r.ok)throw new Error('Nominatim HTTP '+r.status);
+  const d=await r.json();
+  if(!d||!d.length)return null;
+  const a=d[0].address||{};
   const pc=a.postcode||'';
   let dept=pc.slice(0,2);
-  if(dept==='20') dept=parseFloat(r.lon)>9?'2B':'2A';
-  return{found:true,lat:parseFloat(r.lat),lng:parseFloat(r.lon),display:r.display_name.split(',').slice(0,3).join(','),rue:(a.house_number?a.house_number+' ':'')+(a.road||''),commune:a.city||a.town||a.village||a.municipality||'',codePostal:pc,dept,region:a.state||'',population:0,densite:0,superficie:0};
+  if(dept==='20')dept=parseFloat(d[0].lon)>9?'2B':'2A';
+  return{lat:parseFloat(d[0].lat),lng:parseFloat(d[0].lon),display:d[0].display_name.split(',').slice(0,3).join(','),rue:(a.house_number?a.house_number+' ':'')+(a.road||''),commune:a.city||a.town||a.village||a.municipality||'',codePostal:pc,dept,region:a.state||''};
 }
 
-async function suggestNominatim(query){
-  const url='https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(query)+'&countrycodes=fr&limit=6&accept-language=fr';
-  const res=await fetch(url,{headers:{'User-Agent':'GeoStatFrance/1.0'}});
-  if(!res.ok)return[];
-  const data=await res.json();
-  return data.map(r=>({display:r.display_name.split(',').slice(0,3).join(',').trim(),lat:parseFloat(r.lat),lng:parseFloat(r.lon)}));
+async function suggest(query){
+  if(query.length<3)return[];
+  try{
+    const r=await fetch('https://nominatim.openstreetmap.org/search?format=json&q='+encodeURIComponent(query)+'&countrycodes=fr&limit=6&accept-language=fr',{headers:{'User-Agent':'GeoStatFrance/1.0'}});
+    if(!r.ok)return[];
+    const d=await r.json();
+    return d.map(x=>({display:x.display_name.split(',').slice(0,3).join(',').trim(),lat:parseFloat(x.lat),lng:parseFloat(x.lon)}));
+  }catch(e){return[]}
 }
 
 async function enrichCommune(geo){
-  if(!geo.codePostal)return geo;
   try{
-    const url='https://geo.api.gouv.fr/communes?codePostal='+geo.codePostal+'&fields=code,nom,population,superficie&limit=5';
-    const res=await fetch(url);if(!res.ok)return geo;
-    const data=await res.json();if(!data||!data.length)return geo;
-    let best=data[0];
-    if(geo.commune){const m=data.find(x=>x.nom.toLowerCase()===geo.commune.toLowerCase());if(m)best=m;}
+    const r=await fetch('https://geo.api.gouv.fr/communes?codePostal='+geo.codePostal+'&fields=code,nom,population,superficie&limit=5');
+    if(!r.ok)return geo;
+    const d=await r.json();if(!d||!d.length)return geo;
+    let best=d[0];
+    if(geo.commune){const m=d.find(x=>x.nom.toLowerCase()===geo.commune.toLowerCase());if(m)best=m;}
     geo.population=best.population||0;geo.superficie=best.superficie||0;
     geo.densite=geo.superficie>0?Math.round(geo.population/(geo.superficie/100)):0;
     geo.codeCommune=best.code;if(best.nom)geo.commune=best.nom;
@@ -330,103 +298,134 @@ async function enrichCommune(geo){
   return geo;
 }
 
-async function getIRIS(lat,lng,codeCommune){
-  if(!codeCommune)return null;
-  try{
-    // Essai 1 : endpoint IRIS avec contour
-    const url="https://geo.api.gouv.fr/iris?lon="+lng+"&lat="+lat+"&codeCommune="+codeCommune+"&fields=code,nom,contour,type";
-    const res=await fetch(url);
-    if(res.ok){
-      const data=await res.json();
-      if(data&&data.length&&data[0].contour)return data[0];
-      if(data&&data.length){
-        // Essai 2 : récupérer le contour via le code IRIS
-        const code=data[0].code;
-        const url2="https://geo.api.gouv.fr/iris/"+code+"?fields=code,nom,contour";
-        const res2=await fetch(url2);
-        if(res2.ok){
-          const d2=await res2.json();
-          if(d2&&d2.contour)return d2;
-        }
-        return data[0];
-      }
+// ═══════════════════════════════════════════
+// OVERPASS — UNE SEULE REQUÊTE POUR TOUT
+// ═══════════════════════════════════════════
+async function fetchAllPOI(lat, lng, rayon, activeKeys){
+  // Construire une seule requête Overpass pour toutes les catégories actives
+  // pour éviter le rate limiting (429)
+  let parts = '';
+  activeKeys.forEach(key => {
+    const cfg = POI_CATS[key];
+    if(!cfg) return;
+    const tagParts = cfg.tag.split('~');
+    let filter = '';
+    if(tagParts.length === 2){
+      const [k, v] = tagParts[0].split('=');
+      filter = '["'+k+'"~"'+tagParts[1]+'"]';
+    } else {
+      const [k, v] = cfg.tag.split('=');
+      filter = '["'+k+'"="'+v+'"]';
     }
-    return null;
-  }catch(e){return null}
+    const around = '(around:'+rayon+','+lat+','+lng+')';
+    parts += 'node'+filter+around+';';
+    if(cfg.t === 'way') parts += 'way'+filter+around+';';
+  });
+
+  const q = '[out:json][timeout:25];('+parts+');out center tags 100;';
+  try{
+    const r = await fetch(OVERPASS, {method:'POST', body:q});
+    if(!r.ok) return {};
+    const d = await r.json();
+    const result = {};
+    activeKeys.forEach(key => result[key] = []);
+
+    (d.elements||[]).forEach(el => {
+      const tags = el.tags || {};
+      const elLat = el.lat || (el.center && el.center.lat);
+      const elLng = el.lon || (el.center && el.center.lon);
+      if(!elLat || !elLng) return;
+      const name = tags.name || tags.operator || tags.brand || '';
+
+      // Associer chaque élément à la bonne catégorie
+      activeKeys.forEach(key => {
+        const cfg = POI_CATS[key];
+        if(!cfg) return;
+        let match = false;
+        const tagParts = cfg.tag.split('~');
+        if(tagParts.length === 2){
+          const [k] = tagParts[0].split('=');
+          const pattern = tagParts[1];
+          if(tags[k] && new RegExp(pattern).test(tags[k])) match = true;
+        } else {
+          const [k, v] = cfg.tag.split('=');
+          if(tags[k] === v) match = true;
+        }
+        if(match && result[key].length < 30){
+          result[key].push({name: name||cfg.l, lat:elLat, lng:elLng, tags});
+        }
+      });
+    });
+    return result;
+  }catch(e){return{}}
 }
 
-// ═══════════════════════════════════════════════════════════
-// OVERPASS — POI RÉELS
-// ═══════════════════════════════════════════════════════════
-async function fetchPOI(key,lat,lng,rayon){
-  const cacheKey=key+"_"+lat.toFixed(3)+"_"+lng.toFixed(3)+"_"+rayon;
-  if(poiCache[cacheKey])return poiCache[cacheKey];
-  const cfg=POI_CFG[key];if(!cfg)return[];
-  const q="[out:json][timeout:20];("+cfg.q+"(around:"+rayon+","+lat+","+lng+"););out center 50;";
+// ═══════════════════════════════════════════
+// IRIS via Overpass (polygone OSM admin)
+// ═══════════════════════════════════════════
+async function fetchIRISContour(lat, lng, codeCommune){
+  // Récupérer le code et nom IRIS via geo.api.gouv.fr (pas de contour, juste metadata)
+  let irisInfo = null;
   try{
-    const res=await fetch(OVERPASS_URL,{method:"POST",body:q});
-    if(!res.ok)return[];
-    const d=await res.json();
-    const items=(d.elements||[]).map(el=>({
-      name:(el.tags&&(el.tags.name||el.tags.operator||el.tags.brand))||cfg.l,
-      lat:el.lat||(el.center&&el.center.lat),
-      lng:el.lon||(el.center&&el.center.lon),
-      tags:el.tags||{}
-    })).filter(i=>i.lat&&i.lng);
-    poiCache[cacheKey]=items;return items;
-  }catch(e){return[]}
-}
+    const r = await fetch('https://geo.api.gouv.fr/iris?lon='+lng+'&lat='+lat+'&codeCommune='+codeCommune+'&fields=code,nom,type');
+    if(r.ok){
+      const d = await r.json();
+      if(d && d.length) irisInfo = {code: d[0].code, nom: d[0].nom, type: d[0].type};
+    }
+  }catch(e){}
 
-// ═══════════════════════════════════════════════════════════
-// DVF — PRIX IMMOBILIERS RÉELS
-// ═══════════════════════════════════════════════════════════
-async function fetchDVF(codeCommune){
-  if(!codeCommune)return null;
-  try{
-    // API DVF Etalab
-    const url=`https://apidf-preprod.cerema.fr/indicateurs/dv3f/communes/indicateurs/?code_insee=${codeCommune}&fields=annee,nb_ventes_maison,nb_ventes_appart,prix_m2_median_maison,prix_m2_median_appart,surface_mediane_maison,surface_mediane_appart`;
-    const res=await fetch(url);
-    if(!res.ok)throw new Error('DVF HTTP '+res.status);
-    const data=await res.json();
-    if(!data||!data.results||!data.results.length)return null;
-    // Prendre l'année la plus récente
-    const sorted=data.results.sort((a,b)=>b.annee-a.annee);
-    return sorted[0];
-  }catch(e){
-    // Fallback : API DVF simplifiée
+  // Récupérer le vrai polygone IRIS via Overpass OSM
+  // Les IRIS sont dans OSM avec ref:INSEE = code IRIS
+  if(irisInfo && irisInfo.code){
     try{
-      const url2=`https://api.gouv.fr/proxy/dvf/api/communes/${codeCommune}/stats`;
-      const res2=await fetch(url2);
-      if(res2.ok)return await res2.json();
-    }catch(e2){}
-    return null;
+      const q = '[out:json][timeout:15];relation["ref:INSEE"="'+irisInfo.code+'"]["boundary"="statistical"];out geom;';
+      const r = await fetch(OVERPASS, {method:'POST', body:q});
+      if(r.ok){
+        const d = await r.json();
+        if(d.elements && d.elements.length){
+          const el = d.elements[0];
+          // Convertir en GeoJSON polygon
+          if(el.members){
+            const coords = [];
+            el.members.filter(m=>m.role==='outer' && m.geometry).forEach(m=>{
+              coords.push(m.geometry.map(p=>[p.lon, p.lat]));
+            });
+            if(coords.length){
+              return {...irisInfo, geojson:{type:'MultiPolygon', coordinates:coords.map(c=>[c])}};
+            }
+          }
+        }
+      }
+    }catch(e){}
   }
+
+  return irisInfo; // retourne sans contour OSM si pas trouvé
 }
 
-// ═══════════════════════════════════════════════════════════
-// LOYERS ANIL — VIA API OPENDATA
-// ═══════════════════════════════════════════════════════════
-async function fetchLoyers(codePostal,commune){
+// ═══════════════════════════════════════════
+// QPV et ZFU via Overpass
+// ═══════════════════════════════════════════
+async function fetchZones(lat, lng, rayon){
+  const q = '[out:json][timeout:20];('
+    + 'relation["boundary"="administrative"]["designation"~"QPV|ZFU|ZUS"](around:'+rayon+','+lat+','+lng+');'
+    + 'relation["social_facility"~"QPV|ZFU"](around:'+rayon+','+lat+','+lng+');'
+    + 'way["boundary"="administrative"]["designation"~"QPV|ZFU"](around:'+rayon+','+lat+','+lng+');'
+    + ');out geom tags;';
   try{
-    // Dataset ANIL via data.gouv.fr
-    const url=`https://data.gouv.fr/fr/datasets/r/5612d027-7879-4b7d-ab0e-44b4bc5d0c0d`;
-    // Trop lourd à charger directement, on utilise l'API de recherche
-    const searchUrl=`https://tabular-api.data.gouv.fr/api/resources/5612d027-7879-4b7d-ab0e-44b4bc5d0c0d/data/?code_postal__exact=${codePostal}&page_size=5`;
-    const res=await fetch(searchUrl);
-    if(!res.ok)return null;
-    const d=await res.json();
-    if(!d.data||!d.data.length)return null;
-    return d.data[0];
-  }catch(e){return null}
+    const r = await fetch(OVERPASS, {method:'POST', body:q});
+    if(!r.ok) return {qpv:[], zfu:[]};
+    const d = await r.json();
+    return {qpv: d.elements||[], zfu:[]};
+  }catch(e){return {qpv:[], zfu:[]}}
 }
 
-// ═══════════════════════════════════════════════════════════
-// ESTIMATION TERRITORIALE (fallback)
-// ═══════════════════════════════════════════════════════════
-function estimate(dept,dens){
+// ═══════════════════════════════════════════
+// ESTIMATION TERRITORIALE
+// ═══════════════════════════════════════════
+function estimate(dept, dens){
   const isParis=dept==='75';
   const isIDF=['75','92','93','94','78','91','95','77'].includes(dept);
-  const isDense=dens>5000,isUrban=dens>1500;
+  const isDense=dens>5000, isUrban=dens>1500;
   return{
     irisP:isDense?2200:isUrban?1400:700,
     irisL:isDense?1000:isUrban?650:300,
@@ -435,11 +434,11 @@ function estimate(dept,dens){
     pctHLM:isParis?18:dept==='93'?35:isDense?24:12,
     pctMaison:isParis?3:isDense?12:isUrban?35:74,
     pctAppart:isParis?97:isDense?88:isUrban?65:26,
-    p1:isParis?22:isDense?14:8,p2:isParis?30:isDense?24:15,
-    p3:isParis?28:isDense?30:27,p4:isParis?12:isDense?20:28,p5:isParis?8:isDense?12:22,
-    emm0:isUrban?20:13,emm1:isUrban?38:30,emm2:isUrban?42:57,
+    p1:isParis?22:isDense?14:8, p2:isParis?30:isDense?24:15,
+    p3:isParis?28:isDense?30:27, p4:isParis?12:isDense?20:28, p5:isParis?8:isDense?12:22,
+    emm0:isUrban?20:13, emm1:isUrban?38:30, emm2:isUrban?42:57,
     pctSV:isParis?55:isIDF?28:isDense?22:isUrban?15:6,
-    pct1V:isParis?32:isDense?48:55,pct2V:isParis?13:isDense?24:30,
+    pct1V:isParis?32:isDense?48:55, pct2V:isParis?13:isDense?24:30,
     rev:isParis?2200:dept==='92'?2600:isIDF?1900:isUrban?1700:1520,
     loyer:isParis?32:dept==='92'?25:isIDF?18:isDense?15:isUrban?12:8,
     loyerM:isParis?27:isUrban?10:7,
@@ -452,436 +451,397 @@ function estimate(dept,dens){
     ev1:isParis?-1.5:isIDF?-1.8:isUrban?.8:1.5,
     ev5:isParis?9:isIDF?14:isUrban?18:24,
     tension:isParis?'Très forte':isIDF?'Forte':isDense?'Modérée':'Faible',
-    profil:isParis?'Centre dense, majorité de locataires, fort tissu commercial. Marché très tendu.':
-           isIDF?'Périphérie urbaine, mix propriétaires/locataires, bon accès aux transports.':
-           isDense?'Ville dense, tissu résidentiel mixte, marché immobilier actif.':
+    profil:isParis?'Centre dense, majorité de locataires, fort tissu commercial.':
+           isIDF?'Périphérie urbaine, mix propriétaires/locataires, bon accès TC.':
+           isDense?'Ville dense, tissu résidentiel mixte, marché actif.':
            isUrban?'Ville moyenne, marché équilibré, propriétaires majoritaires.':
-           'Zone péri-urbaine ou rurale, tissu pavillonnaire, faible tension locative.',
+           'Zone péri-urbaine, tissu pavillonnaire, faible tension locative.',
   };
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // LEAFLET
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function initMap(){
-  map=L.map('mel',{center:[46.6,2.5],zoom:6});
+  map = L.map('mel', {center:[46.6,2.5], zoom:6});
   L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',{
-    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/">CartoDB</a>',
-    subdomains:'abcd',maxZoom:19
+    attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © CartoDB',
+    subdomains:'abcd', maxZoom:19
   }).addTo(map);
 }
 
-function mkIcon(emoji,color,sz=24){
+function mkIcon(emoji, color, sz=24){
   return L.divIcon({
-    html:`<div style="width:${sz}px;height:${sz}px;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:${Math.round(sz*.5)}px;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.25)">${emoji}</div>`,
-    className:'',iconSize:[sz,sz],iconAnchor:[sz/2,sz/2],popupAnchor:[0,-sz/2]
+    html:'<div style="width:'+sz+'px;height:'+sz+'px;background:'+color+';border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:'+Math.round(sz*.5)+'px;border:2px solid #fff;box-shadow:0 2px 5px rgba(0,0,0,.25)">'+emoji+'</div>',
+    className:'', iconSize:[sz,sz], iconAnchor:[sz/2,sz/2], popupAnchor:[0,-sz/2]
   });
 }
 
 function clearMainLayers(){
-  Object.keys(layerGroups).filter(k=>!k.endsWith('_2')).forEach(k=>{try{map.removeLayer(layerGroups[k])}catch(e){}delete layerGroups[k]});
-  if(irisLayer){try{map.removeLayer(irisLayer)}catch(e){}irisLayer=null}
-  if(rayonLayer){try{map.removeLayer(rayonLayer)}catch(e){}rayonLayer=null}
-  if(pinMarker){try{map.removeLayer(pinMarker)}catch(e){}pinMarker=null}
+  Object.keys(poiLayers).filter(k=>!k.endsWith('_2')).forEach(k=>{try{map.removeLayer(poiLayers[k])}catch(e){}delete poiLayers[k]});
+  [irisLayer,rayonLayer,pinMarker,qpvLayer,zfuLayer].forEach(l=>{if(l)try{map.removeLayer(l)}catch(e){}});
+  irisLayer=rayonLayer=pinMarker=qpvLayer=zfuLayer=null;
 }
 
 function clearCompareLayers(){
-  Object.keys(layerGroups).filter(k=>k.endsWith('_2')).forEach(k=>{try{map.removeLayer(layerGroups[k])}catch(e){}delete layerGroups[k]});
-  if(irisLayer2){try{map.removeLayer(irisLayer2)}catch(e){}irisLayer2=null}
-  if(rayonLayer2){try{map.removeLayer(rayonLayer2)}catch(e){}rayonLayer2=null}
-  if(pinMarker2){try{map.removeLayer(pinMarker2)}catch(e){}pinMarker2=null}
+  Object.keys(poiLayers).filter(k=>k.endsWith('_2')).forEach(k=>{try{map.removeLayer(poiLayers[k])}catch(e){}delete poiLayers[k]});
+  [irisLayer2,rayonLayer2,pinMarker2,qpvLayer2,zfuLayer2].forEach(l=>{if(l)try{map.removeLayer(l)}catch(e){}});
+  irisLayer2=rayonLayer2=pinMarker2=qpvLayer2=zfuLayer2=null;
 }
 
-async function drawLayers(lat,lng,rayon,irisData,display,isCompare=false){
-  const pinColor=isCompare?'#f59e0b':'#ef4444';
-  const irisColor=isCompare?'#f59e0b':'#3b82f6';
-  const suffix=isCompare?'_2':'';
+async function drawMap(lat, lng, rayon, irisInfo, poiData, zones, isCompare){
+  const pinColor = isCompare ? '#f59e0b' : '#ef4444';
+  const irisColor = isCompare ? '#f59e0b' : '#3b82f6';
+  const sfx = isCompare ? '_2' : '';
+  const label = isCompare ? 'B' : 'A';
 
-  const pin=L.marker([lat,lng],{icon:L.divIcon({
-    html:`<div style="width:18px;height:18px;background:${pinColor};border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px ${pinColor}44"></div>`,
-    className:'',iconSize:[18,18],iconAnchor:[9,9]
-  })}).bindPopup(`<b>${isCompare?'B':'A'}: ${display}</b>`).addTo(map);
-
+  // Pin
+  const pin = L.marker([lat,lng], {icon:L.divIcon({
+    html:'<div style="width:18px;height:18px;background:'+pinColor+';border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 3px '+pinColor+'44"></div>',
+    className:'', iconSize:[18,18], iconAnchor:[9,9]
+  })}).bindPopup('<b>'+label+'</b>').addTo(map);
   if(isCompare) pinMarker2=pin; else pinMarker=pin;
 
   // IRIS
-  let iL;
-  if(irisData&&irisData.contour){
-    iL=L.geoJSON(irisData.contour,{style:{color:irisColor,weight:2,dashArray:'8,4',fillColor:irisColor,fillOpacity:.08}})
-      .bindTooltip((isCompare?'B — ':'A — ')+'IRIS : '+(irisData.nom||''),{direction:'top'}).addTo(map);
-  }else{
-    const w=0.007+Math.random()*.005,h=0.005+Math.random()*.004;
-    const pts=[[lat-h,lng-w],[lat-h,lng+w],[lat+h,lng+w],[lat+h,lng-w]];
-    iL=L.polygon(pts,{color:irisColor,weight:2,dashArray:'8,4',fillColor:irisColor,fillOpacity:.08})
-      .bindTooltip('IRIS estimé',{direction:'top'}).addTo(map);
+  const cbI = document.querySelector('.lcb[data-l="iris"]');
+  if(irisInfo){
+    let iL;
+    if(irisInfo.geojson){
+      iL = L.geoJSON(irisInfo.geojson, {style:{color:irisColor,weight:2.5,dashArray:'8,4',fillColor:irisColor,fillOpacity:.08}})
+        .bindTooltip((isCompare?'B — ':'A — ')+'IRIS : '+(irisInfo.nom||irisInfo.code||''), {direction:'top'}).addTo(map);
+    } else {
+      // Fallback : polygone estimé
+      const w=0.007+Math.random()*.005, h=0.005+Math.random()*.004;
+      iL = L.polygon([[lat-h,lng-w],[lat-h,lng+w],[lat+h,lng+w],[lat+h,lng-w]], {
+        color:irisColor, weight:2, dashArray:'8,4', fillColor:irisColor, fillOpacity:.08
+      }).bindTooltip('IRIS : '+(irisInfo.nom||'estimé'), {direction:'top'}).addTo(map);
+    }
+    if(cbI && !cbI.checked) map.removeLayer(iL);
+    if(isCompare) irisLayer2=iL; else irisLayer=iL;
   }
-  if(isCompare) irisLayer2=iL; else irisLayer=iL;
-  const cbI=document.querySelector('.lcb[data-l="iris"]');
-  if(cbI&&!cbI.checked)map.removeLayer(iL);
 
   // Rayon
-  const rL=L.circle([lat,lng],{radius:rayon,color:pinColor,weight:1.5,dashArray:'6,4',fillColor:pinColor,fillOpacity:.04}).addTo(map);
+  const cbR = document.querySelector('.lcb[data-l="rayon"]');
+  const rL = L.circle([lat,lng], {radius:rayon, color:pinColor, weight:1.5, dashArray:'5,5', fillColor:pinColor, fillOpacity:.04}).addTo(map);
+  if(cbR && !cbR.checked) map.removeLayer(rL);
   if(isCompare) rayonLayer2=rL; else rayonLayer=rL;
-  const cbR=document.querySelector('.lcb[data-l="rayon"]');
-  if(cbR&&!cbR.checked)map.removeLayer(rL);
 
-  // POI réels via Overpass
-  const activeKeys=Object.keys(POI_CFG).filter(k=>{const cb=document.querySelector(`.lcb[data-l="${k}"]`);return cb&&cb.checked});
-  for(const key of activeKeys){
-    const items=await fetchPOI(key,lat,lng,rayon);
-    if(!items.length)continue;
-    const g=L.layerGroup();
-    items.slice(0,30).forEach(item=>{
-      const tags=item.tags;
-      let pop=`<b>${POI_CFG[key].e} ${item.name}</b>`;
-      const addr=[tags['addr:housenumber'],tags['addr:street']].filter(Boolean).join(' ');
-      if(addr)pop+=`<br><small>${addr}</small>`;
-      const oh=tags.opening_hours;
-      if(oh)pop+=`<br><small>🕐 ${oh}</small>`;
-      if(tags.phone)pop+=`<br><small>📞 ${tags.phone}</small>`;
-      L.marker([item.lat,item.lng],{icon:mkIcon(POI_CFG[key].e,POI_CFG[key].c)}).bindPopup(pop,{maxWidth:220}).addTo(g);
-    });
-    g.addTo(map);
-    layerGroups[key+suffix]=g;
+  // QPV
+  const cbQ = document.querySelector('.lcb[data-l="qpv"]');
+  if(zones && zones.qpv && zones.qpv.length){
+    const features = zones.qpv.filter(el=>el.members||el.geometry).map(el=>{
+      if(el.type==='relation' && el.members){
+        const coords=[];
+        el.members.filter(m=>m.role==='outer'&&m.geometry).forEach(m=>coords.push(m.geometry.map(p=>[p.lon,p.lat])));
+        return{type:'Feature',properties:{name:el.tags?.name||'QPV'},geometry:{type:'MultiPolygon',coordinates:coords.map(c=>[c])}};
+      }
+      return null;
+    }).filter(Boolean);
+    if(features.length){
+      const qL = L.geoJSON({type:'FeatureCollection',features},{
+        style:{color:'#ef4444',weight:2,dashArray:'6,3',fillColor:'#ef4444',fillOpacity:.1}
+      }).bindTooltip(f=>f.feature.properties.name, {direction:'top'}).addTo(map);
+      if(cbQ && !cbQ.checked) map.removeLayer(qL);
+      if(isCompare) qpvLayer2=qL; else qpvLayer=qL;
+    }
   }
+
+  // POI sur la carte
+  Object.keys(poiData).forEach(key=>{
+    const items = poiData[key];
+    if(!items || !items.length) return;
+    const cfg = POI_CATS[key];
+    if(!cfg) return;
+    const cb = document.querySelector('.lcb[data-l="'+key+'"]');
+    const g = L.layerGroup();
+    items.forEach(item=>{
+      let pop = '<b>'+cfg.e+' '+item.name+'</b>';
+      const oh = item.tags.opening_hours||'';
+      const addr = [item.tags['addr:housenumber'],item.tags['addr:street']].filter(Boolean).join(' ');
+      const phone = item.tags.phone||item.tags['contact:phone']||'';
+      if(addr) pop += '<br><small>'+addr+'</small>';
+      if(oh) pop += '<br><small>🕐 '+oh+'</small>';
+      if(phone) pop += '<br><small>📞 '+phone+'</small>';
+      L.marker([item.lat,item.lng], {icon:mkIcon(cfg.e,cfg.c)}).bindPopup(pop,{maxWidth:220}).addTo(g);
+    });
+    if(cb && cb.checked) g.addTo(map);
+    poiLayers[key+sfx] = g;
+  });
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // RENDU PANNEAUX
-// ═══════════════════════════════════════════════════════════
-async function renderPanels(geo,irisData,dvfData,loyerData,rayon){
-  const dept=geo.dept||'75';
-  const dens=geo.densite||0;
-  const pop=geo.population||0;
-  const d=estimate(dept,dens);
-  currentEst=d;
-
-  // STATS
-  document.getElementById('panel-stats').innerHTML=`
-    <div class="nc">
-      <div class="big">${geo.display||geo.commune||'—'}</div>
-      <div class="sm">${[geo.commune,geo.region,'Dép. '+dept].filter(Boolean).join(' · ')}</div>
-    </div>
-    <div class="sl">Localisation</div>
-    ${geo.rue?kv('Adresse',geo.rue):''}
-    ${kv('Code postal',geo.codePostal||'—')}
-    ${kv('Commune',geo.commune||'—','acc')}
-    ${kv('Département',dept)}
-    ${geo.region?kv('Région',geo.region):''}
-    ${irisData?kv('IRIS',(irisData.nom||irisData.code||'—'),'acc'):''}
-    <div class="sl">Commune</div>
-    ${kv('Population',pop?pop.toLocaleString('fr-FR')+' hab.':'—','acc')}
-    ${dens?kv('Densité',dens.toLocaleString('fr-FR')+' hab./km²'):''}
-    ${geo.superficie?kv('Superficie',(geo.superficie/100).toFixed(1)+' km²'):''}
-    <div class="sl">Indicateurs clés</div>
-    ${kv('Revenu médian estimé',d.rev.toLocaleString('fr-FR')+'€/mois','acc')}
-    ${kv('Taux de chômage estimé',d.txCho+'%')}
-    ${kv('Âge médian estimé',d.ageMed+' ans')}
-    ${kv('Propriétaires estimé',d.pctProp+'%')}`;
-
-  // IRIS
-  const irisNom=irisData?(irisData.nom||irisData.code||'IRIS'):'IRIS';
-  const irisReal=irisData&&irisData.contour;
-  document.getElementById('panel-iris').innerHTML=`
-    <div class="nc"><div class="big">IRIS — ${irisNom}</div><div class="sm">${irisReal?'Contour officiel geo.api.gouv.fr':'Estimation territoriale'}</div></div>
-    <div class="${irisReal?'rib':'aib'}">${irisReal?'✓ Données officielles':'✦ Estimation INSEE RP 2022'}</div>
-    <div class="sl">Population &amp; ménages</div>
-    ${kv('Population IRIS',d.irisP.toLocaleString('fr-FR')+' hab.','acc')}
-    ${kv('Logements',d.irisL.toLocaleString('fr-FR'))}
-    ${kv('Âge médian',d.ageMed+' ans')}
-    ${kv('Taux de chômage',d.txCho+'%')}
-    ${kv('Revenu médian',d.rev.toLocaleString('fr-FR')+'€/UC/mois')}
-    <div class="sl">Type de logement</div>
-    ${kv('Maisons',d.pctMaison+'%')}${bar(d.pctMaison,'#10b981')}
-    ${kv('Appartements',d.pctAppart+'%')}${bar(d.pctAppart,'#3b82f6')}
-    <div class="sl">Statut d'occupation</div>
-    ${kv('Propriétaires',d.pctProp+'%','grn')}${bar(d.pctProp,'#10b981')}
-    ${kv('Locataires',d.pctLoc+'%')}${bar(d.pctLoc,'#f59e0b')}
-    ${kv('dont HLM',d.pctHLM+'%')}${bar(d.pctHLM,'#ef4444')}
-    <div class="sl">Taille des logements</div>
-    ${[[d.p1,'1P','#bfdbfe'],[d.p2,'2P','#60a5fa'],[d.p3,'3P','#2563eb'],[d.p4,'4P','#1d4ed8'],[d.p5,'5P+','#1e3a8a']].map(([v,l,c])=>`
-      <div style="display:flex;align-items:center;gap:5px;margin:2px 0">
-        <span style="font-size:10px;color:#6b7280;width:22px">${l}</span>
-        <div style="flex:1">${bar(v,c)}</div>
-        <span style="font-size:10px;width:26px;text-align:right">${v}%</span>
-      </div>`).join('')}
-    <div class="sl">Ancienneté</div>
-    ${kv('< 2 ans',d.emm0+'%')}${kv('2–9 ans',d.emm1+'%')}${kv('10 ans+',d.emm2+'%')}
-    <div class="sl">Motorisation</div>
-    ${kv('Sans voiture',d.pctSV+'%')}${kv('1 voiture',d.pct1V+'%')}${kv('2 voitures+',d.pct2V+'%')}
-    <div class="note">${d.profil}</div>`;
-
-  // IMMO — données réelles DVF + ANIL
-  let immoHtml=`<div class="nc"><div class="big">${geo.commune||'—'} — Immobilier</div><div class="sm">DVF DGFiP · ANIL 2025</div></div>`;
-
-  if(dvfData){
-    immoHtml+=`<div class="rib">✓ Données DVF réelles</div>`;
-    immoHtml+=`<div class="sl">Prix de vente réels (DVF)</div>`;
-    if(dvfData.prix_m2_median_appart)immoHtml+=kv('Appartement /m²',Math.round(dvfData.prix_m2_median_appart).toLocaleString('fr-FR')+'€','acc');
-    if(dvfData.prix_m2_median_maison)immoHtml+=kv('Maison /m²',Math.round(dvfData.prix_m2_median_maison).toLocaleString('fr-FR')+'€');
-    if(dvfData.surface_mediane_appart)immoHtml+=kv('Surface médiane appart.',Math.round(dvfData.surface_mediane_appart)+'m²');
-    if(dvfData.surface_mediane_maison)immoHtml+=kv('Surface médiane maison',Math.round(dvfData.surface_mediane_maison)+'m²');
-    if(dvfData.nb_ventes_appart)immoHtml+=kv('Ventes appart. (an)',dvfData.nb_ventes_appart.toLocaleString('fr-FR'));
-    if(dvfData.nb_ventes_maison)immoHtml+=kv('Ventes maisons (an)',dvfData.nb_ventes_maison.toLocaleString('fr-FR'));
-    if(dvfData.annee)immoHtml+=`<div class="note">Source : DVF DGFiP · Année ${dvfData.annee}</div>`;
-  }else{
-    immoHtml+=`<div class="aib">✦ Estimation (DVF non disponible)</div>`;
-    immoHtml+=`<div class="sl">Prix de vente estimés</div>`;
-    immoHtml+=kv('Appartement /m²',d.prixA.toLocaleString('fr-FR')+'€','acc');
-    immoHtml+=kv('Appartement (bien type)',d.prixAT.toLocaleString('fr-FR')+'€');
-    immoHtml+=kv('Maison /m²',d.prixM.toLocaleString('fr-FR')+'€');
-    immoHtml+=kv('Maison (bien type)',d.prixMT.toLocaleString('fr-FR')+'€');
-  }
-
-  if(loyerData){
-    immoHtml+=`<div class="sl">Loyers du marché (ANIL 2025)</div>`;
-    immoHtml+=`<div class="rib">✓ Données ANIL réelles</div>`;
-    const fields=[
-      ['loyer_median_tous','Loyer médian tous types'],
-      ['loyer_median_appart','Appartements'],
-      ['loyer_median_maison','Maisons'],
-      ['loyer_median_t1','T1'],['loyer_median_t2','T2'],
-      ['loyer_median_t3','T3'],['loyer_median_t4','T4+'],
-    ];
-    fields.forEach(([f,l])=>{if(loyerData[f])immoHtml+=kv(l,parseFloat(loyerData[f]).toFixed(1)+'€/m²','acc')});
-    immoHtml+=`<div class="note">Source : Carte des loyers ANIL 2025 · data.gouv.fr</div>`;
-  }else{
-    immoHtml+=`<div class="sl">Loyers estimés (ANIL)</div>`;
-    immoHtml+=kv('Appartement',d.loyer+'€/m² CC');
-    immoHtml+=kv('Maison',d.loyerM+'€/m² CC');
-    immoHtml+=kv('Tension locative',d.tension);
-    const ev1c=d.ev1>=0?'grn':'red',ev5c=d.ev5>=0?'grn':'red';
-    immoHtml+=kv('Évolution 1 an',(d.ev1>=0?'+':'')+d.ev1+'%',ev1c);
-    immoHtml+=kv('Évolution 5 ans',(d.ev5>=0?'+':'')+d.ev5+'%',ev5c);
-  }
-
-  document.getElementById('panel-immo').innerHTML=immoHtml;
-
-  // TRANSPORT — POI réels
-  await renderPOIPanel('transport',['metro','bus','train'],geo.lat,geo.lng,rayon);
-  await renderPOIPanel('commerce',['supermarket','pharmacy','bakery','bank','post_office','cafe','bar','fast_food'],geo.lat,geo.lng,rayon);
-  await renderPOIPanel('educ',['lycee','sup'],geo.lat,geo.lng,rayon,true);
-  await renderPOIPanel('equip',['doctor','park','theatre','stadium'],geo.lat,geo.lng,rayon);
+// ═══════════════════════════════════════════
+function renderStats(geo, irisInfo, d){
+  const pop = geo.population||0, dens = geo.densite||0;
+  document.getElementById('panel-stats').innerHTML =
+    '<div class="nc"><div class="big">'+(geo.display||geo.commune||'—')+'</div>'
+    +'<div class="sm">'+[geo.commune,geo.region,'Dép. '+geo.dept].filter(Boolean).join(' · ')+'</div></div>'
+    +'<div class="sl">Localisation</div>'
+    +(geo.rue?kv('Adresse',geo.rue):'')
+    +kv('Code postal',geo.codePostal||'—')
+    +kv('Commune',geo.commune||'—','acc')
+    +kv('Département',geo.dept)
+    +(geo.region?kv('Région',geo.region):'')
+    +(irisInfo?kv('IRIS',(irisInfo.nom||irisInfo.code||'—')+(irisInfo.geojson?' ✓':''),'acc'):'')
+    +'<div class="sl">Commune</div>'
+    +kv('Population',pop?pop.toLocaleString('fr-FR')+' hab.':'—','acc')
+    +(dens?kv('Densité',dens.toLocaleString('fr-FR')+' hab./km²'):'')
+    +(geo.superficie?kv('Superficie',(geo.superficie/100).toFixed(1)+' km²'):'')
+    +'<div class="sl">Indicateurs estimés</div>'
+    +kv('Revenu médian',d.rev.toLocaleString('fr-FR')+'€/mois','acc')
+    +kv('Taux de chômage',d.txCho+'%')
+    +kv('Âge médian',d.ageMed+' ans')
+    +kv('Propriétaires',d.pctProp+'%')
+    +kv('Loyer appt.',d.loyer+'€/m²')
+    +kv('Prix appt.',d.prixA.toLocaleString('fr-FR')+'€/m²');
 }
 
-async function renderPOIPanel(panelId,keys,lat,lng,rayon,showEff=false){
-  ldPanel('panel-'+panelId,'Chargement POI réels (OpenStreetMap)…');
-  let html='';
-  for(const key of keys){
-    const cfg=POI_CFG[key];
-    const items=await fetchPOI(key,lat,lng,rayon);
-    if(!items.length)continue;
-    html+=`<div class="sl">${cfg.e} ${cfg.l} (${items.length})</div>`;
+function renderIRIS(irisInfo, d){
+  const nom = irisInfo?(irisInfo.nom||irisInfo.code||'IRIS'):'IRIS';
+  const hasReal = irisInfo && irisInfo.geojson;
+  document.getElementById('panel-iris').innerHTML =
+    '<div class="nc"><div class="big">IRIS — '+nom+'</div>'
+    +'<div class="sm">'+(hasReal?'Polygone OSM officiel':'Estimation INSEE RP 2022')+'</div></div>'
+    +'<div class="aib">'+(hasReal?'✓ Polygone réel (OSM)':'✦ Estimation territoriale')+'</div>'
+    +'<div class="sl">Population &amp; ménages</div>'
+    +kv('Population IRIS',d.irisP.toLocaleString('fr-FR')+' hab.','acc')
+    +kv('Logements',d.irisL.toLocaleString('fr-FR'))
+    +kv('Âge médian',d.ageMed+' ans')
+    +kv('Chômage',d.txCho+'%')
+    +kv('Revenu médian',d.rev.toLocaleString('fr-FR')+'€/UC/mois')
+    +'<div class="sl">Type de logement</div>'
+    +kv('Maisons',d.pctMaison+'%')+bar(d.pctMaison,'#10b981')
+    +kv('Appartements',d.pctAppart+'%')+bar(d.pctAppart,'#3b82f6')
+    +'<div class="sl">Statut d\'occupation</div>'
+    +kv('Propriétaires',d.pctProp+'%','grn')+bar(d.pctProp,'#10b981')
+    +kv('Locataires',d.pctLoc+'%')+bar(d.pctLoc,'#f59e0b')
+    +kv('dont HLM',d.pctHLM+'%')+bar(d.pctHLM,'#ef4444')
+    +'<div class="sl">Taille des logements</div>'
+    +[[d.p1,'1P','#bfdbfe'],[d.p2,'2P','#60a5fa'],[d.p3,'3P','#2563eb'],[d.p4,'4P','#1d4ed8'],[d.p5,'5P+','#1e3a8a']].map(([v,l,c])=>
+      '<div style="display:flex;align-items:center;gap:5px;margin:2px 0"><span style="font-size:10px;color:#6b7280;width:22px">'+l+'</span><div style="flex:1">'+bar(v,c)+'</div><span style="font-size:10px;width:26px;text-align:right">'+v+'%</span></div>'
+    ).join('')
+    +'<div class="sl">Ancienneté</div>'
+    +kv('< 2 ans',d.emm0+'%')+kv('2–9 ans',d.emm1+'%')+kv('10 ans+',d.emm2+'%')
+    +'<div class="sl">Motorisation</div>'
+    +kv('Sans voiture',d.pctSV+'%')+kv('1 voiture',d.pct1V+'%')+kv('2 voitures+',d.pct2V+'%')
+    +'<div class="note">'+d.profil+'</div>';
+}
+
+function renderImmo(geo, d){
+  const ev1c=d.ev1>=0?'grn':'red', ev5c=d.ev5>=0?'grn':'red';
+  document.getElementById('panel-immo').innerHTML =
+    '<div class="nc"><div class="big">'+(geo.commune||'—')+' — Immobilier</div>'
+    +'<div class="sm">Estimation ANIL 2025 · DVF 2024</div></div>'
+    +'<div class="aib">✦ Estimation basée sur profil territorial</div>'
+    +'<div class="sl">Loyers (€/m² CC)</div>'
+    +kv('Appartement',d.loyer+'€/m²','acc')
+    +kv('Maison',d.loyerM+'€/m²')
+    +kv('Tension locative',d.tension)
+    +'<div class="sl">Prix de vente</div>'
+    +kv('Appartement /m²',d.prixA.toLocaleString('fr-FR')+'€','acc')
+    +kv('Appartement type',d.prixAT.toLocaleString('fr-FR')+'€')
+    +kv('Maison /m²',d.prixM.toLocaleString('fr-FR')+'€')
+    +kv('Maison type',d.prixMT.toLocaleString('fr-FR')+'€')
+    +'<div class="sl">Dynamique</div>'
+    +kv('Évolution 1 an',(d.ev1>=0?'+':'')+d.ev1+'%',ev1c)
+    +kv('Évolution 5 ans',(d.ev5>=0?'+':'')+d.ev5+'%',ev5c)
+    +'<div class="note">'+d.profil+'</div>';
+}
+
+function renderPOIPanel(panelId, keys, poiData){
+  let html = '';
+  keys.forEach(key=>{
+    const cfg = POI_CATS[key];
+    const items = poiData[key]||[];
+    if(!items.length) return;
+    html += '<div class="sl">'+cfg.e+' '+cfg.l+' ('+items.length+')</div>';
     items.slice(0,6).forEach(item=>{
-      const oh=item.tags.opening_hours||'';
-      const phone=item.tags.phone||item.tags['contact:phone']||'';
-      const addr=[item.tags['addr:housenumber'],item.tags['addr:street']].filter(Boolean).join(' ');
-      html+=`<div class="pi">
-        <div class="pn">${item.name}${oh==='24/7'?'<span class="pe">24/7</span>':''}</div>
-        ${addr?`<div class="pm">${addr}</div>`:''}
-        ${oh&&oh!=='24/7'?`<div class="pm">🕐 ${oh.slice(0,45)}</div>`:''}
-        ${phone?`<div class="pm">📞 ${phone}</div>`:''}
-      </div>`;
+      const oh = item.tags.opening_hours||'';
+      const addr = [item.tags['addr:housenumber'],item.tags['addr:street']].filter(Boolean).join(' ');
+      const phone = item.tags.phone||item.tags['contact:phone']||'';
+      html += '<div class="pi"><div class="pn">'+item.name+(oh==='24/7'?'<span class="pe">24/7</span>':'')+'</div>'
+        +(addr?'<div class="pm">'+addr+'</div>':'')
+        +(oh&&oh!=='24/7'?'<div class="pm">🕐 '+oh.slice(0,45)+'</div>':'')
+        +(phone?'<div class="pm">📞 '+phone+'</div>':'')
+        +'</div>';
     });
-    if(items.length>6)html+=`<div style="font-size:10px;color:#9ca3af;padding:2px 0">+${items.length-6} autres dans le rayon</div>`;
-  }
-  html+=`<div class="note">Source : OpenStreetMap via Overpass API</div>`;
-  document.getElementById('panel-'+panelId).innerHTML=html||`<div class="em">Aucun résultat dans ce rayon</div>`;
+    if(items.length>6) html += '<div style="font-size:10px;color:#9ca3af">+'+( items.length-6)+' autres</div>';
+  });
+  html += '<div class="note">Source : OpenStreetMap · Overpass API</div>';
+  document.getElementById(panelId).innerHTML = html || '<div class="em">Aucun résultat dans ce rayon</div>';
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // EXPORT PDF
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function exportPDF(){
   if(!currentGeo){alert('Recherchez une adresse d\'abord');return}
-  const d=currentEst;const geo=currentGeo;
+  const d=currentEst, geo=currentGeo;
   const w=window.open('','_blank');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>GéoStat — ${geo.display}</title>
-  <style>body{font-family:system-ui;padding:24px;max-width:700px;margin:auto;color:#111}
-  h1{font-size:18px;font-weight:700;margin-bottom:4px}
-  .sub{font-size:12px;color:#6b7280;margin-bottom:20px}
-  h2{font-size:13px;font-weight:700;color:#3b82f6;margin:16px 0 6px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}
-  table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
-  td{padding:4px 6px;border-bottom:1px solid #f3f4f6}
-  td:last-child{font-weight:600;text-align:right}
-  .note{font-size:10px;color:#6b7280;margin-top:6px}
-  @media print{button{display:none}}
-  </style></head><body>
-  <button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:13px">🖨️ Imprimer / Sauvegarder en PDF</button>
-  <h1>📍 ${geo.display||geo.commune}</h1>
-  <div class="sub">${[geo.commune,geo.region,'Dép. '+geo.dept].filter(Boolean).join(' · ')} · GéoStat France · ${new Date().toLocaleDateString('fr-FR')}</div>
-  <h2>Localisation</h2>
-  <table>
-  ${geo.rue?`<tr><td>Adresse</td><td>${geo.rue}</td></tr>`:''}
-  <tr><td>Code postal</td><td>${geo.codePostal||'—'}</td></tr>
-  <tr><td>Commune</td><td>${geo.commune||'—'}</td></tr>
-  <tr><td>Département</td><td>${geo.dept}</td></tr>
-  ${geo.population?`<tr><td>Population</td><td>${geo.population.toLocaleString('fr-FR')} hab.</td></tr>`:''}
-  ${geo.densite?`<tr><td>Densité</td><td>${geo.densite.toLocaleString('fr-FR')} hab./km²</td></tr>`:''}
-  ${currentIRIS?`<tr><td>IRIS</td><td>${currentIRIS.nom||currentIRIS.code}</td></tr>`:''}
-  </table>
-  <h2>Données IRIS — Logement (INSEE RP 2022)</h2>
-  <table>
-  <tr><td>Population IRIS estimée</td><td>${d.irisP.toLocaleString('fr-FR')} hab.</td></tr>
-  <tr><td>Logements</td><td>${d.irisL.toLocaleString('fr-FR')}</td></tr>
-  <tr><td>Propriétaires</td><td>${d.pctProp}%</td></tr>
-  <tr><td>Locataires</td><td>${d.pctLoc}%</td></tr>
-  <tr><td>dont HLM</td><td>${d.pctHLM}%</td></tr>
-  <tr><td>Maisons</td><td>${d.pctMaison}%</td></tr>
-  <tr><td>Appartements</td><td>${d.pctAppart}%</td></tr>
-  <tr><td>Sans voiture</td><td>${d.pctSV}%</td></tr>
-  <tr><td>Revenu médian</td><td>${d.rev.toLocaleString('fr-FR')}€/mois</td></tr>
-  <tr><td>Taux de chômage</td><td>${d.txCho}%</td></tr>
-  <tr><td>Âge médian</td><td>${d.ageMed} ans</td></tr>
-  </table>
-  <h2>Immobilier</h2>
-  <table>
-  <tr><td>Prix appart. (estimé)</td><td>${d.prixA.toLocaleString('fr-FR')}€/m²</td></tr>
-  <tr><td>Prix maison (estimé)</td><td>${d.prixM.toLocaleString('fr-FR')}€/m²</td></tr>
-  <tr><td>Loyer appart. (estimé)</td><td>${d.loyer}€/m²</td></tr>
-  <tr><td>Tension locative</td><td>${d.tension}</td></tr>
-  <tr><td>Évolution 1 an</td><td>${d.ev1>=0?'+':''}${d.ev1}%</td></tr>
-  <tr><td>Évolution 5 ans</td><td>${d.ev5>=0?'+':''}${d.ev5}%</td></tr>
-  </table>
-  <div class="note">Généré par GéoStat France · Sources : INSEE RP 2022, DVF DGFiP, ANIL 2025, OpenStreetMap</div>
-  </body></html>`);
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>GéoStat — '+geo.display+'</title>'
+    +'<style>body{font-family:system-ui;padding:24px;max-width:700px;margin:auto}h1{font-size:18px;font-weight:700;margin-bottom:4px}.sub{font-size:12px;color:#6b7280;margin-bottom:20px}h2{font-size:13px;font-weight:700;color:#3b82f6;margin:16px 0 6px;border-bottom:1px solid #e5e7eb;padding-bottom:4px}table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}td{padding:4px 6px;border-bottom:1px solid #f3f4f6}td:last-child{font-weight:600;text-align:right}@media print{button{display:none}}</style>'
+    +'</head><body>'
+    +'<button onclick="window.print()" style="margin-bottom:16px;padding:8px 16px;background:#3b82f6;color:#fff;border:none;border-radius:6px;cursor:pointer">🖨️ Imprimer / PDF</button>'
+    +'<h1>📍 '+(geo.display||geo.commune)+'</h1>'
+    +'<div class="sub">'+[geo.commune,geo.region,'Dép. '+geo.dept].filter(Boolean).join(' · ')+' · GéoStat France · '+new Date().toLocaleDateString('fr-FR')+'</div>'
+    +'<h2>Localisation</h2><table>'
+    +(geo.rue?'<tr><td>Adresse</td><td>'+geo.rue+'</td></tr>':'')
+    +'<tr><td>Code postal</td><td>'+(geo.codePostal||'—')+'</td></tr>'
+    +'<tr><td>Commune</td><td>'+(geo.commune||'—')+'</td></tr>'
+    +'<tr><td>Département</td><td>'+geo.dept+'</td></tr>'
+    +(geo.population?'<tr><td>Population</td><td>'+geo.population.toLocaleString('fr-FR')+' hab.</td></tr>':'')
+    +(geo.densite?'<tr><td>Densité</td><td>'+geo.densite.toLocaleString('fr-FR')+' hab./km²</td></tr>':'')
+    +'</table>'
+    +'<h2>IRIS — Logement (INSEE RP 2022)</h2><table>'
+    +'<tr><td>Population estimée</td><td>'+d.irisP.toLocaleString('fr-FR')+' hab.</td></tr>'
+    +'<tr><td>Logements</td><td>'+d.irisL.toLocaleString('fr-FR')+'</td></tr>'
+    +'<tr><td>Propriétaires</td><td>'+d.pctProp+'%</td></tr>'
+    +'<tr><td>Locataires</td><td>'+d.pctLoc+'%</td></tr>'
+    +'<tr><td>dont HLM</td><td>'+d.pctHLM+'%</td></tr>'
+    +'<tr><td>Maisons</td><td>'+d.pctMaison+'%</td></tr>'
+    +'<tr><td>Appartements</td><td>'+d.pctAppart+'%</td></tr>'
+    +'<tr><td>Sans voiture</td><td>'+d.pctSV+'%</td></tr>'
+    +'<tr><td>Revenu médian</td><td>'+d.rev.toLocaleString('fr-FR')+'€/mois</td></tr>'
+    +'<tr><td>Chômage</td><td>'+d.txCho+'%</td></tr>'
+    +'<tr><td>Âge médian</td><td>'+d.ageMed+' ans</td></tr>'
+    +'</table>'
+    +'<h2>Immobilier</h2><table>'
+    +'<tr><td>Prix appart.</td><td>'+d.prixA.toLocaleString('fr-FR')+'€/m²</td></tr>'
+    +'<tr><td>Prix maison</td><td>'+d.prixM.toLocaleString('fr-FR')+'€/m²</td></tr>'
+    +'<tr><td>Loyer appart.</td><td>'+d.loyer+'€/m²</td></tr>'
+    +'<tr><td>Tension locative</td><td>'+d.tension+'</td></tr>'
+    +'</table>'
+    +'<div style="font-size:10px;color:#6b7280;margin-top:16px">Sources : INSEE RP 2022, ANIL 2025, OpenStreetMap</div>'
+    +'</body></html>');
   w.document.close();
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // COMPARAISON
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 function showComparison(){
   if(!currentGeo||!compareGeo)return;
-  const a=currentEst,b=compareEst;
-  const ga=currentGeo,gb=compareGeo;
-
-  function cmpKV(label,va,vb,higherIsBetter=true){
-    const na=parseFloat(String(va).replace(/[^0-9.-]/g,''));
-    const nb=parseFloat(String(vb).replace(/[^0-9.-]/g,''));
-    let clsA='',clsB='';
-    if(!isNaN(na)&&!isNaN(nb)&&na!==nb){
-      if(higherIsBetter){clsA=na>nb?'better':'worse';clsB=nb>na?'better':'worse';}
-      else{clsA=na<nb?'better':'worse';clsB=nb<na?'better':'worse';}
-    }
-    return`<div class="cmp-kv"><span class="cmp-kl">${label}</span><span class="cmp-kv2 ${clsA}">${va}</span><span class="cmp-kv2 ${clsB}">${vb}</span></div>`;
+  const a=currentEst, b=compareEst, ga=currentGeo, gb=compareGeo;
+  function cmpRow(l,va,vb,hiB=true){
+    const na=parseFloat(String(va).replace(/[^0-9.-]/g,'')), nb=parseFloat(String(vb).replace(/[^0-9.-]/g,''));
+    let ca='',cb='';
+    if(!isNaN(na)&&!isNaN(nb)&&na!==nb){ca=hiB?(na>nb?'better':'worse'):(na<nb?'better':'worse');cb=hiB?(nb>na?'better':'worse'):(nb<na?'better':'worse')}
+    return '<div class="cmp-kv"><span class="cmp-kl">'+l+'</span><span class="cmp-v '+ca+'">'+va+'</span><span class="cmp-v '+cb+'">'+vb+'</span></div>';
   }
-
-  document.getElementById('cmp-content').innerHTML=`
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;font-size:11px;margin-bottom:10px">
-      <div style="background:#eff6ff;padding:8px;border-radius:6px;font-weight:700;color:#3b82f6">📍 A — ${ga.commune||ga.display}</div>
-      <div style="background:#fffbeb;padding:8px;border-radius:6px;font-weight:700;color:#f59e0b;margin-left:8px">📍 B — ${gb.commune||gb.display}</div>
-    </div>
-    <div style="font-size:10px;color:#6b7280;margin-bottom:10px">🟢 Vert = meilleur · 🔴 Rouge = moins bon</div>
-
-    <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin:10px 0 5px">Localisation</div>
-    <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:0">
-      ${['Commune','Département','Population','Densité'].map((l,i)=>{
-        const vals=[
-          [ga.commune||'—',gb.commune||'—',false],
-          [ga.dept,gb.dept,false],
-          [ga.population?(ga.population/1000).toFixed(0)+'k':'—',gb.population?(gb.population/1000).toFixed(0)+'k':'—',true],
-          [ga.densite?ga.densite.toLocaleString('fr-FR'):'—',gb.densite?gb.densite.toLocaleString('fr-FR'):'—',false],
-        ][i];
-        return cmpKV(l,vals[0],vals[1],vals[2]);
-      }).join('')}
-    </div>
-
-    <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin:10px 0 5px">Logement IRIS</div>
-    <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:0">
-      ${cmpKV('Propriétaires',a.pctProp+'%',b.pctProp+'%',true)}
-      ${cmpKV('HLM',a.pctHLM+'%',b.pctHLM+'%',false)}
-      ${cmpKV('Maisons',a.pctMaison+'%',b.pctMaison+'%',false)}
-      ${cmpKV('Sans voiture',a.pctSV+'%',b.pctSV+'%',false)}
-      ${cmpKV('Revenu médian',a.rev.toLocaleString('fr-FR')+'€',b.rev.toLocaleString('fr-FR')+'€',true)}
-      ${cmpKV('Chômage',a.txCho+'%',b.txCho+'%',false)}
-      ${cmpKV('Âge médian',a.ageMed+' ans',b.ageMed+' ans',false)}
-    </div>
-
-    <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.4px;margin:10px 0 5px">Immobilier</div>
-    <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:0">
-      ${cmpKV('Prix appart. /m²',a.prixA.toLocaleString('fr-FR')+'€',b.prixA.toLocaleString('fr-FR')+'€',false)}
-      ${cmpKV('Prix maison /m²',a.prixM.toLocaleString('fr-FR')+'€',b.prixM.toLocaleString('fr-FR')+'€',false)}
-      ${cmpKV('Loyer appart.',a.loyer+'€/m²',b.loyer+'€/m²',false)}
-      ${cmpKV('Tension locative',a.tension,b.tension,false)}
-      ${cmpKV('Évol. 1 an',(a.ev1>=0?'+':'')+a.ev1+'%',(b.ev1>=0?'+':'')+b.ev1+'%',true)}
-    </div>`;
-
+  document.getElementById('cmp-content').innerHTML =
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">'
+    +'<div style="background:#eff6ff;padding:8px;border-radius:6px;font-weight:700;color:#3b82f6">📍 A — '+(ga.commune||ga.display)+'</div>'
+    +'<div style="background:#fffbeb;padding:8px;border-radius:6px;font-weight:700;color:#f59e0b">📍 B — '+(gb.commune||gb.display)+'</div>'
+    +'</div>'
+    +'<p style="font-size:10px;color:#6b7280;margin-bottom:10px">🟢 Vert = meilleur · 🔴 Rouge = moins bon</p>'
+    +'<p style="font-size:11px;font-weight:700;color:#6b7280;margin:8px 0 4px">LOCALISATION</p>'
+    +cmpRow('Population',ga.population?ga.population.toLocaleString('fr-FR')+' hab.':'—',gb.population?gb.population.toLocaleString('fr-FR')+' hab.':'—',true)
+    +cmpRow('Densité',ga.densite?ga.densite.toLocaleString('fr-FR')+' hab./km²':'—',gb.densite?gb.densite.toLocaleString('fr-FR')+' hab./km²':'—',false)
+    +'<p style="font-size:11px;font-weight:700;color:#6b7280;margin:8px 0 4px">LOGEMENT IRIS</p>'
+    +cmpRow('Propriétaires',a.pctProp+'%',b.pctProp+'%',true)
+    +cmpRow('HLM',a.pctHLM+'%',b.pctHLM+'%',false)
+    +cmpRow('Maisons',a.pctMaison+'%',b.pctMaison+'%',false)
+    +cmpRow('Sans voiture',a.pctSV+'%',b.pctSV+'%',false)
+    +cmpRow('Revenu médian',a.rev.toLocaleString('fr-FR')+'€',b.rev.toLocaleString('fr-FR')+'€',true)
+    +cmpRow('Chômage',a.txCho+'%',b.txCho+'%',false)
+    +cmpRow('Âge médian',a.ageMed+' ans',b.ageMed+' ans',false)
+    +'<p style="font-size:11px;font-weight:700;color:#6b7280;margin:8px 0 4px">IMMOBILIER</p>'
+    +cmpRow('Prix appart. /m²',a.prixA.toLocaleString('fr-FR')+'€',b.prixA.toLocaleString('fr-FR')+'€',false)
+    +cmpRow('Prix maison /m²',a.prixM.toLocaleString('fr-FR')+'€',b.prixM.toLocaleString('fr-FR')+'€',false)
+    +cmpRow('Loyer appart.',a.loyer+'€/m²',b.loyer+'€/m²',false)
+    +cmpRow('Tension',a.tension,b.tension,false);
   document.getElementById('cmp-overlay').style.display='flex';
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // GEOCODAGE PRINCIPAL
-// ═══════════════════════════════════════════════════════════
-async function doGeocode(query,knownLat,knownLng){
+// ═══════════════════════════════════════════
+async function doGeocode(query, knownLat, knownLng){
   if(!query.trim())return;
   const btn=document.getElementById('sbtn');
   btn.textContent='⏳';btn.disabled=true;
-  showSta('Géocodage en cours…',0);
   ['stats','iris','immo','transport','commerce','educ','equip'].forEach(p=>ldPanel('panel-'+p,'Chargement…'));
   setTab('stats');
+  showSta('Géocodage en cours…',0);
 
   try{
     let geo;
     if(knownLat&&knownLng){
-      geo={found:true,lat:knownLat,lng:knownLng,display:query,commune:query.split(',')[0].trim(),codePostal:'',dept:'00',region:'',population:0,densite:0,superficie:0};
-      try{const det=await geocodeNominatim(query);if(det.found)geo={...det,lat:knownLat,lng:knownLng}}catch(e){}
+      geo={lat:knownLat,lng:knownLng,display:query,commune:query.split(',')[0].trim(),codePostal:'',dept:'00',region:'',population:0,densite:0,superficie:0};
+      try{const g=await geocode(query);if(g)geo={...g,lat:knownLat,lng:knownLng}}catch(e){}
     }else{
-      geo=await geocodeNominatim(query);
+      geo=await geocode(query);
     }
-
-    if(!geo.found){
+    if(!geo){
       showSta('Adresse introuvable',5000);
       ['stats','iris','immo','transport','commerce','educ','equip'].forEach(p=>
-        document.getElementById('panel-'+p).innerHTML='<div class="em">Adresse introuvable.<br>Exemples :<br>"15 rue de Rivoli Paris"<br>"Place Bellecour Lyon"</div>');
+        document.getElementById('panel-'+p).innerHTML='<div class="em">Adresse introuvable.</div>');
       return;
     }
 
     geo=await enrichCommune(geo);
-    const irisData=geo.codeCommune?await getIRIS(geo.lat,geo.lng,geo.codeCommune):null;
     const rayon=parseInt(document.getElementById('rad').value);
 
-    // Mode comparaison
-    if(compareMode&&currentGeo){
-      compareGeo=geo;compareIRIS=irisData;compareEst=estimate(geo.dept,geo.densite||0);
+    if(compareMode && currentGeo){
+      // Mode comparaison — adresse B
+      compareGeo=geo;
+      compareEst=estimate(geo.dept,geo.densite||0);
       clearCompareLayers();
-      await drawLayers(geo.lat,geo.lng,rayon,irisData,geo.display||query,true);
+      const activeKeys=Object.keys(POI_CATS).filter(k=>{const cb=document.querySelector('.lcb[data-l="'+k+'"]');return cb&&cb.checked});
+      const [irisInfo, poiData] = await Promise.all([
+        geo.codeCommune?fetchIRISContour(geo.lat,geo.lng,geo.codeCommune):Promise.resolve(null),
+        fetchAllPOI(geo.lat,geo.lng,rayon,activeKeys)
+      ]);
+      await drawMap(geo.lat,geo.lng,rayon,irisInfo,poiData,null,true);
       document.getElementById('cmp-msg').textContent='B : '+geo.display;
       document.getElementById('btn-cmp-show').style.display='inline-block';
       showSta('📍 B : '+(geo.display||query),4000);
-      btn.textContent='Chercher';btn.disabled=false;
       return;
     }
 
-    // Recherche principale
+    // Adresse principale A
     clearMainLayers();
-    currentGeo=geo;currentIRIS=irisData;
+    currentGeo=geo;
     map.setView([geo.lat,geo.lng],15,{animate:true});
 
-    // Données réelles en parallèle
-    const [_,dvfData,loyerData]=await Promise.all([
-      drawLayers(geo.lat,geo.lng,rayon,irisData,geo.display||query,false),
-      geo.codeCommune?fetchDVF(geo.codeCommune):Promise.resolve(null),
-      geo.codePostal?fetchLoyers(geo.codePostal,geo.commune):Promise.resolve(null),
+    const activeKeys=Object.keys(POI_CATS).filter(k=>{const cb=document.querySelector('.lcb[data-l="'+k+'"]');return cb&&cb.checked});
+
+    showSta('Chargement des données…',0);
+    const [irisInfo, poiData, zones] = await Promise.all([
+      geo.codeCommune?fetchIRISContour(geo.lat,geo.lng,geo.codeCommune):Promise.resolve(null),
+      fetchAllPOI(geo.lat,geo.lng,rayon,activeKeys),
+      fetchZones(geo.lat,geo.lng,Math.max(rayon,1000))
     ]);
 
-    await renderPanels(geo,irisData,dvfData,loyerData,rayon);
+    const d=estimate(geo.dept,geo.densite||0);
+    currentEst=d;
+
+    await drawMap(geo.lat,geo.lng,rayon,irisInfo,poiData,zones,false);
+    renderStats(geo,irisInfo,d);
+    renderIRIS(irisInfo,d);
+    renderImmo(geo,d);
+    renderPOIPanel('panel-transport',['metro','bus','train'],poiData);
+    renderPOIPanel('panel-commerce',['supermarket','pharmacy','bakery','bank','post_office','cafe','bar','fast_food'],poiData);
+    renderPOIPanel('panel-educ',['lycee','sup'],poiData);
+    renderPOIPanel('panel-equip',['doctor','park','theatre','stadium'],poiData);
+
     saveHistory(geo);
     showSta('📍 '+(geo.display||query),5000);
 
   }catch(e){
     showSta('Erreur : '+e.message,6000);
-    document.getElementById('panel-stats').innerHTML=`<div class="em">Erreur.<br><small>${e.message}</small></div>`;
+    document.getElementById('panel-stats').innerHTML='<div class="em">Erreur : '+e.message+'</div>';
+    console.error(e);
   }finally{
     btn.textContent='Chercher';btn.disabled=false;
   }
 }
 
-// ═══════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════
 // EVENTS
-// ═══════════════════════════════════════════════════════════
-let sugTimeout=null;
-
+// ═══════════════════════════════════════════
+let sugT=null;
 document.getElementById('si').addEventListener('keydown',e=>{
   if(e.key==='Enter'){e.preventDefault();hideSugg();doGeocode(document.getElementById('si').value.trim())}
   if(e.key==='Escape')hideSugg();
@@ -890,15 +850,12 @@ document.getElementById('sbtn').addEventListener('click',()=>{hideSugg();doGeoco
 document.getElementById('si').addEventListener('input',e=>{
   const v=e.target.value;
   document.getElementById('sc').style.display=v?'block':'none';
-  clearTimeout(sugTimeout);
-  if(v.length>=3)sugTimeout=setTimeout(async()=>{const items=await suggestNominatim(v);showSugg(items)},500);
+  clearTimeout(sugT);
+  if(v.length>=3) sugT=setTimeout(async()=>{const items=await suggest(v);if(items.length){const box=document.getElementById('sugg');box.innerHTML='';items.forEach(item=>{const d=document.createElement('div');d.className='sug';d.innerHTML='<div>'+item.display+'</div><div class="sug-s">'+item.lat.toFixed(4)+'°N · '+item.lng.toFixed(4)+'°E</div>';d.addEventListener('mousedown',ev=>{ev.preventDefault();document.getElementById('si').value=item.display;hideSugg();doGeocode(item.display,item.lat,item.lng)});box.appendChild(d)});box.style.display='block'}},500);
   else hideSugg();
 });
 document.getElementById('si').addEventListener('blur',()=>setTimeout(hideSugg,200));
-document.getElementById('sc').addEventListener('click',()=>{
-  document.getElementById('si').value='';document.getElementById('sc').style.display='none';hideSugg();
-  clearMainLayers();clearCompareLayers();document.getElementById('sta').style.display='none';
-});
+document.getElementById('sc').addEventListener('click',()=>{document.getElementById('si').value='';document.getElementById('sc').style.display='none';hideSugg();clearMainLayers();clearCompareLayers()});
 document.getElementById('rad').addEventListener('change',()=>{const v=document.getElementById('si').value.trim();if(v)doGeocode(v)});
 
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setTab(t.dataset.p)));
@@ -906,20 +863,18 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>setT
 document.querySelectorAll('.lcb').forEach(cb=>{
   cb.addEventListener('change',function(){
     const k=this.dataset.l;
-    if(k==='iris'){
-      if(irisLayer){this.checked?irisLayer.addTo(map):map.removeLayer(irisLayer)}
-      if(irisLayer2){this.checked?irisLayer2.addTo(map):map.removeLayer(irisLayer2)}
-    }else if(k==='rayon'){
-      if(rayonLayer){this.checked?rayonLayer.addTo(map):map.removeLayer(rayonLayer)}
-      if(rayonLayer2){this.checked?rayonLayer2.addTo(map):map.removeLayer(rayonLayer2)}
-    }else{
-      if(layerGroups[k]){this.checked?layerGroups[k].addTo(map):map.removeLayer(layerGroups[k])}
-      if(layerGroups[k+'_2']){this.checked?layerGroups[k+'_2'].addTo(map):map.removeLayer(layerGroups[k+'_2'])}
+    const toggle=(l,on)=>{if(l){on?l.addTo(map):map.removeLayer(l)}};
+    if(k==='iris'){toggle(irisLayer,this.checked);toggle(irisLayer2,this.checked)}
+    else if(k==='rayon'){toggle(rayonLayer,this.checked);toggle(rayonLayer2,this.checked)}
+    else if(k==='qpv'){toggle(qpvLayer,this.checked);toggle(qpvLayer2,this.checked)}
+    else if(k==='zfu'){toggle(zfuLayer,this.checked);toggle(zfuLayer2,this.checked)}
+    else{
+      if(poiLayers[k]){this.checked?poiLayers[k].addTo(map):map.removeLayer(poiLayers[k])}
+      if(poiLayers[k+'_2']){this.checked?poiLayers[k+'_2'].addTo(map):map.removeLayer(poiLayers[k+'_2'])}
     }
   });
 });
 
-// Historique
 document.getElementById('btn-hist').addEventListener('click',e=>{
   e.stopPropagation();
   const p=document.getElementById('hist-panel');
@@ -927,25 +882,22 @@ document.getElementById('btn-hist').addEventListener('click',e=>{
 });
 document.addEventListener('click',()=>document.getElementById('hist-panel').style.display='none');
 
-// Comparaison
 document.getElementById('btn-cmp').addEventListener('click',()=>{
   if(!currentGeo){alert('Recherchez d\'abord une adresse A');return}
   compareMode=true;
   document.getElementById('cmp-bar').style.display='flex';
   document.getElementById('btn-cmp').classList.add('active');
-  showSta('Mode comparaison activé — recherchez une adresse B',4000);
+  showSta('Mode comparaison — recherchez une adresse B',4000);
 });
 document.getElementById('btn-cmp-cancel').addEventListener('click',()=>{
   compareMode=false;
   document.getElementById('cmp-bar').style.display='none';
   document.getElementById('btn-cmp').classList.remove('active');
   document.getElementById('btn-cmp-show').style.display='none';
-  clearCompareLayers();compareGeo=null;compareIRIS=null;compareEst=null;
+  clearCompareLayers();compareGeo=compareEst=null;
 });
 document.getElementById('btn-cmp-show').addEventListener('click',showComparison);
 document.getElementById('cmp-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('cmp-overlay'))document.getElementById('cmp-overlay').style.display='none'});
-
-// PDF
 document.getElementById('btn-pdf').addEventListener('click',exportPDF);
 
 initMap();
