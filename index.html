@@ -302,8 +302,7 @@ async function enrichCommune(geo){
 // OVERPASS — UNE SEULE REQUÊTE POUR TOUT
 // ═══════════════════════════════════════════
 async function fetchAllPOI(lat, lng, rayon, activeKeys){
-  // Construire une seule requête Overpass pour toutes les catégories actives
-  // pour éviter le rate limiting (429)
+  // Une seule requête Overpass pour toutes les catégories — évite le 429
   let parts = '';
   activeKeys.forEach(key => {
     const cfg = POI_CATS[key];
@@ -311,7 +310,7 @@ async function fetchAllPOI(lat, lng, rayon, activeKeys){
     const tagParts = cfg.tag.split('~');
     let filter = '';
     if(tagParts.length === 2){
-      const [k, v] = tagParts[0].split('=');
+      const [k] = tagParts[0].split('=');
       filter = '["'+k+'"~"'+tagParts[1]+'"]';
     } else {
       const [k, v] = cfg.tag.split('=');
@@ -323,83 +322,102 @@ async function fetchAllPOI(lat, lng, rayon, activeKeys){
   });
 
   const q = '[out:json][timeout:25];('+parts+');out center tags 100;';
-  try{
-    const r = await fetch(OVERPASS, {method:'POST', body:q});
-    if(!r.ok) return {};
-    const d = await r.json();
-    const result = {};
-    activeKeys.forEach(key => result[key] = []);
 
-    (d.elements||[]).forEach(el => {
-      const tags = el.tags || {};
-      const elLat = el.lat || (el.center && el.center.lat);
-      const elLng = el.lon || (el.center && el.center.lon);
-      if(!elLat || !elLng) return;
-      const name = tags.name || tags.operator || tags.brand || '';
+  // Miroirs Overpass — essai successif si 429 ou 504
+  const mirrors = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter',
+    'https://overpass.private.coffee/api/interpreter'
+  ];
 
-      // Associer chaque élément à la bonne catégorie
-      activeKeys.forEach(key => {
-        const cfg = POI_CATS[key];
-        if(!cfg) return;
-        let match = false;
-        const tagParts = cfg.tag.split('~');
-        if(tagParts.length === 2){
-          const [k] = tagParts[0].split('=');
-          const pattern = tagParts[1];
-          if(tags[k] && new RegExp(pattern).test(tags[k])) match = true;
-        } else {
-          const [k, v] = cfg.tag.split('=');
-          if(tags[k] === v) match = true;
-        }
-        if(match && result[key].length < 30){
-          result[key].push({name: name||cfg.l, lat:elLat, lng:elLng, tags});
-        }
-      });
+  let data = null;
+  for(const mirror of mirrors){
+    try{
+      const r = await fetch(mirror, {method:'POST', body:q});
+      if(r.ok){
+        data = await r.json();
+        break;
+      }
+      if(r.status !== 429 && r.status !== 504) break; // erreur permanente, pas la peine de réessayer
+    }catch(e){}
+    // Attendre un peu avant de réessayer
+    await new Promise(res => setTimeout(res, 1000));
+  }
+
+  if(!data) return {};
+
+  const result = {};
+  activeKeys.forEach(key => result[key] = []);
+
+  (data.elements||[]).forEach(el => {
+    const tags = el.tags || {};
+    const elLat = el.lat || (el.center && el.center.lat);
+    const elLng = el.lon || (el.center && el.center.lon);
+    if(!elLat || !elLng) return;
+    const name = tags.name || tags.operator || tags.brand || '';
+
+    activeKeys.forEach(key => {
+      const cfg = POI_CATS[key];
+      if(!cfg) return;
+      let match = false;
+      const tagParts = cfg.tag.split('~');
+      if(tagParts.length === 2){
+        const [k] = tagParts[0].split('=');
+        const pattern = tagParts[1];
+        if(tags[k] && new RegExp(pattern).test(tags[k])) match = true;
+      } else {
+        const [k, v] = cfg.tag.split('=');
+        if(tags[k] === v) match = true;
+      }
+      if(match && result[key].length < 30){
+        result[key].push({name: name||cfg.l, lat:elLat, lng:elLng, tags});
+      }
     });
-    return result;
-  }catch(e){return{}}
+  });
+  return result;
 }
 
 // ═══════════════════════════════════════════
 // IRIS via Overpass (polygone OSM admin)
 // ═══════════════════════════════════════════
 async function fetchIRISContour(lat, lng, codeCommune){
-  // Récupérer le code et nom IRIS via geo.api.gouv.fr (pas de contour, juste metadata)
-  let irisInfo = null;
-  try{
-    const r = await fetch('https://geo.api.gouv.fr/iris?lon='+lng+'&lat='+lat+'&codeCommune='+codeCommune+'&fields=code,nom,type');
-    if(r.ok){
-      const d = await r.json();
-      if(d && d.length) irisInfo = {code: d[0].code, nom: d[0].nom, type: d[0].type};
-    }
-  }catch(e){}
+  // Recherche IRIS dans Overpass par coordonnées GPS
+  // Les IRIS sont stockés dans OSM comme des relations admin avec boundary=statistical
+  const mirrors = [
+    'https://overpass-api.de/api/interpreter',
+    'https://overpass.kumi.systems/api/interpreter'
+  ];
 
-  // Récupérer le vrai polygone IRIS via Overpass OSM
-  // Les IRIS sont dans OSM avec ref:INSEE = code IRIS
-  if(irisInfo && irisInfo.code){
+  for(const mirror of mirrors){
     try{
-      const q = '[out:json][timeout:15];relation["ref:INSEE"="'+irisInfo.code+'"]["boundary"="statistical"];out geom;';
-      const r = await fetch(OVERPASS, {method:'POST', body:q});
-      if(r.ok){
-        const d = await r.json();
-        if(d.elements && d.elements.length){
-          const el = d.elements[0];
-          // Convertir en GeoJSON polygon
-          if(el.members){
-            const coords = [];
-            el.members.filter(m=>m.role==='outer' && m.geometry).forEach(m=>{
-              coords.push(m.geometry.map(p=>[p.lon, p.lat]));
-            });
-            if(coords.length){
-              return {...irisInfo, geojson:{type:'MultiPolygon', coordinates:coords.map(c=>[c])}};
+      // Recherche par coordonnées : relation OSM qui contient ce point
+      const q = '[out:json][timeout:20];is_in('+lat+','+lng+')->.a;relation(pivot.a)["boundary"="statistical"]["ref:INSEE"~"^[0-9]{2}[AB0-9][0-9]{7}$"];out geom tags;';
+      const r = await fetch(mirror, {method:'POST', body:q});
+      if(!r.ok) continue;
+      const d = await r.json();
+      if(d.elements && d.elements.length){
+        const el = d.elements[0];
+        const code = el.tags?.['ref:INSEE'] || '';
+        const nom = el.tags?.name || el.tags?.['name:fr'] || code;
+        if(el.members){
+          const coords = [];
+          el.members.filter(m=>m.role==='outer' && m.geometry && m.geometry.length>2).forEach(m=>{
+            const ring = m.geometry.map(p=>[p.lon, p.lat]);
+            // Fermer le polygone si nécessaire
+            if(ring[0][0]!==ring[ring.length-1][0] || ring[0][1]!==ring[ring.length-1][1]){
+              ring.push(ring[0]);
             }
+            coords.push(ring);
+          });
+          if(coords.length){
+            return {code, nom, geojson:{type:'MultiPolygon', coordinates:coords.map(c=>[c])}};
           }
         }
+        return {code, nom, geojson:null};
       }
     }catch(e){}
   }
-
-  return irisInfo; // retourne sans contour OSM si pas trouvé
+  return null;
 }
 
 // ═══════════════════════════════════════════
