@@ -215,9 +215,9 @@ input[type=checkbox]{width:11px;height:11px;cursor:pointer;flex-shrink:0;accent-
 const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
 const POI_CFG = {
   bus:        {e:'🚌',c:'#2980b9',q:'node["highway"="bus_stop"]',l:'Bus/tram'},
-  metro:      {e:'🚇',c:'#8e44ad',q:'node["railway"="station"]',l:'Métro/RER'},
-  train:      {e:'🚂',c:'#c0392b',q:'node["railway"="station"]["station"="rail"]',l:'Gare'},
-  supermarket:{e:'🛒',c:'#27ae60',q:'node["shop"~"supermarket|convenience"]',l:'Supermarché'},
+  metro:      {e:'🚇',c:'#8e44ad',q:'node["railway"~"station|subway_entrance"]',l:'Métro/RER'},
+  train:      {e:'🚂',c:'#c0392b',q:'node["railway"="station"]',l:'Gare'},
+  supermarket:{e:'🛒',c:'#27ae60',q:'node["shop"~"supermarket|convenience|grocery"]',l:'Supermarché'},
   pharmacy:   {e:'💊',c:'#e74c3c',q:'node["amenity"="pharmacy"]',l:'Pharmacie'},
   bakery:     {e:'🥖',c:'#e67e22',q:'node["shop"="bakery"]',l:'Boulangerie'},
   bank:       {e:'🏦',c:'#2c3e50',q:'node["amenity"="bank"]',l:'Banque'},
@@ -225,12 +225,12 @@ const POI_CFG = {
   cafe:       {e:'☕',c:'#795548',q:'node["amenity"="cafe"]',l:'Café'},
   bar:        {e:'🍺',c:'#6d4c41',q:'node["amenity"="bar"]',l:'Bar'},
   fast_food:  {e:'🍔',c:'#ff5722',q:'node["amenity"="fast_food"]',l:'Fast food'},
-  doctor:     {e:'🩺',c:'#00bcd4',q:'node["amenity"="doctors"]',l:'Médecin'},
-  park:       {e:'🌳',c:'#4caf50',q:'way["leisure"="park"]',l:'Parc'},
-  theatre:    {e:'🎭',c:'#9c27b0',q:'node["amenity"="theatre"]',l:'Théâtre'},
-  stadium:    {e:'🏟️',c:'#ff9800',q:'node["leisure"="stadium"]',l:'Stade'},
-  lycee:      {e:'🏫',c:'#1565c0',q:'node["amenity"="school"]["school"~"lycee|lycée|secondary"]',l:'Lycée'},
-  sup:        {e:'🎓',c:'#6a1b9a',q:'node["amenity"~"university|college"]',l:'Supérieur'},
+  doctor:     {e:'🩺',c:'#00bcd4',q:'node["amenity"~"doctors|clinic|hospital"]',l:'Médecin'},
+  park:       {e:'🌳',c:'#4caf50',q:'(way["leisure"="park"];relation["leisure"="park"];)',l:'Parc'},
+  theatre:    {e:'🎭',c:'#9c27b0',q:'node["amenity"~"theatre|cinema"]',l:'Théâtre/Cinéma'},
+  stadium:    {e:'🏟️',c:'#ff9800',q:'(node["leisure"~"stadium|sports_centre"];way["leisure"~"stadium|sports_centre"];)',l:'Stade'},
+  lycee:      {e:'🏫',c:'#1565c0',q:'node["amenity"="school"]',l:'École/Lycée'},
+  sup:        {e:'🎓',c:'#6a1b9a',q:'(node["amenity"~"university|college"];way["amenity"~"university|college"];)',l:'Supérieur'},
 };
 
 // ═══════════════════════════════════════════════════════════
@@ -333,10 +333,25 @@ async function enrichCommune(geo){
 async function getIRIS(lat,lng,codeCommune){
   if(!codeCommune)return null;
   try{
-    const url='https://geo.api.gouv.fr/iris?lon='+lng+'&lat='+lat+'&codeCommune='+codeCommune+'&fields=code,nom,contour';
-    const res=await fetch(url);if(!res.ok)return null;
-    const data=await res.json();
-    return data&&data.length?data[0]:null;
+    // Essai 1 : endpoint IRIS avec contour
+    const url="https://geo.api.gouv.fr/iris?lon="+lng+"&lat="+lat+"&codeCommune="+codeCommune+"&fields=code,nom,contour,type";
+    const res=await fetch(url);
+    if(res.ok){
+      const data=await res.json();
+      if(data&&data.length&&data[0].contour)return data[0];
+      if(data&&data.length){
+        // Essai 2 : récupérer le contour via le code IRIS
+        const code=data[0].code;
+        const url2="https://geo.api.gouv.fr/iris/"+code+"?fields=code,nom,contour";
+        const res2=await fetch(url2);
+        if(res2.ok){
+          const d2=await res2.json();
+          if(d2&&d2.contour)return d2;
+        }
+        return data[0];
+      }
+    }
+    return null;
   }catch(e){return null}
 }
 
@@ -344,17 +359,18 @@ async function getIRIS(lat,lng,codeCommune){
 // OVERPASS — POI RÉELS
 // ═══════════════════════════════════════════════════════════
 async function fetchPOI(key,lat,lng,rayon){
-  const cacheKey=`${key}_${lat.toFixed(3)}_${lng.toFixed(3)}_${rayon}`;
+  const cacheKey=key+"_"+lat.toFixed(3)+"_"+lng.toFixed(3)+"_"+rayon;
   if(poiCache[cacheKey])return poiCache[cacheKey];
   const cfg=POI_CFG[key];if(!cfg)return[];
-  const q=`[out:json][timeout:15];(${cfg.q}(around:${rayon},${lat},${lng}););out center 40;`;
+  const q="[out:json][timeout:20];("+cfg.q+"(around:"+rayon+","+lat+","+lng+"););out center 50;";
   try{
-    const res=await fetch(OVERPASS_URL,{method:'POST',body:q});
+    const res=await fetch(OVERPASS_URL,{method:"POST",body:q});
     if(!res.ok)return[];
     const d=await res.json();
     const items=(d.elements||[]).map(el=>({
-      name:el.tags?.name||el.tags?.operator||cfg.l,
-      lat:el.lat||el.center?.lat,lng:el.lon||el.center?.lon,
+      name:(el.tags&&(el.tags.name||el.tags.operator||el.tags.brand))||cfg.l,
+      lat:el.lat||(el.center&&el.center.lat),
+      lng:el.lon||(el.center&&el.center.lon),
       tags:el.tags||{}
     })).filter(i=>i.lat&&i.lng);
     poiCache[cacheKey]=items;return items;
